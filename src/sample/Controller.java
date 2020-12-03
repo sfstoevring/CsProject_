@@ -10,6 +10,8 @@ import java.net.UnknownHostException;
 import java.text.ParseException;
 
 public class Controller {
+    // GUI fields
+    //
     public Tab tabHome;
     public TableView tabHomeTableViewEntries;
     public TableColumn tabHomeTableViewEntriesColumnIP;
@@ -75,16 +77,47 @@ public class Controller {
     public ComboBox tabMethodComboBoxVisualizeMethod;
     public Button tabMethodButtonVisualizeMethod;
 
-    private AnyList<Entries> listOfEntries = new AnyList<>("ListOfEntries");
-    private AnyList<Errors> listOfErrors = new AnyList<>("ListOfErrors");
-
+    //
+    private AnyList<Entry> listOfEntries = new AnyList<>("ListOfEntries");
+    private AnyList<Error> listOfErrors = new AnyList<>("ListOfErrors");
+    private AnyList<Bubble> listOfBubbles = new AnyList<>("ListOfBubbles");
 
     public void initialize() throws ParseException, UnknownHostException {
-        Entries test = new Entries("127.0.0.1","27/nov/2020:12:13:14","get",123,123,"lars","prut",80);
-        listOfEntries.addToList(test);
-        System.out.println(listOfEntries.getFromList().get(0).getClient());
+        Entry testEntry = new Entry("127.0.0.1","27/nov/2020:12:13:14","get",123,123,"lars","prut",80);
+        Error testError = new Error("Fejl, min ven");
+        Bubble bubble = new Bubble("John", 80, 5, 5, "BLAAAAAAAAACK");
+        addToList(testEntry);
+        addToList(testError);
+        addToList(bubble);
     }
 
-    //funktioner der styrer Anylists
+    // Funktioner til Anylist-stuffz
+    //
+    public <T> void addToList(T object) throws ParseException, UnknownHostException {
+        // Utility objects for comparing the object passed to the method
+        Entry tempEntry = new Entry("1.1.1.1","1/Jan/1111:11:11:11", "Test", 1, 1, "test", "Windows_ad_bad", 1);
+        Error tempError = new Error("Test Error");
+        Bubble tempBubble = new Bubble("testBubble", 1, 1, 1, "BLACK");
+
+        if(object.getClass().equals(tempEntry.getClass())){
+            listOfEntries.addToList((Entry) object);
+            System.out.println("An Entry object was added to listOfEntries");
+        } else if(object.getClass().equals(tempError.getClass())){
+            listOfErrors.addToList(((Error) object));
+            System.out.println("An Error object was added to listOfErrors");
+        } else if(object.getClass().equals(tempBubble.getClass())){
+            listOfBubbles.addToList(((Bubble) object));
+            System.out.println("A Bubble object was added to listOfBubbles");
+        } else{
+            System.out.println("Could not add object of type " + object.getClass() + " to any of the lists of type AnyList");
+        }
+    }
+
+    public void removeFromList(){
+
+
+    }
+
+
     //Funktioner der styrer grafik
 }

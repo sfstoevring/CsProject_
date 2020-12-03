@@ -6,11 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Entries {
+public class Entry {
 
-    private InetAddress iIp;
-    private String sIp;
-    private String sDate;
+    private InetAddress inetIP;
     private Date dDate;
     private String method;
     private int response;
@@ -19,9 +17,8 @@ public class Entries {
     private String client;
     private int port;
 
-    public Entries(String ip, String date, String method, int response, int responseLength, String fromPage, String client, int port) throws ParseException, UnknownHostException {
-        this.iIp = formatIp(ip);
-        this.sDate = date;
+    public Entry(String IP, String date, String method, int response, int responseLength, String fromPage, String client, int port) throws ParseException, UnknownHostException {
+        this.inetIP = formatIP(IP);
         this.dDate = formatDate(date);
         this.method = method;
         this.response = response;
@@ -31,25 +28,17 @@ public class Entries {
         this.port = port;
     }
 
-    public InetAddress getiIp() {
-        return iIp;
+    public InetAddress getInetIP() {
+        return inetIP;
     }
 
-    public void setiIp(InetAddress iIp) {
-        this.iIp = iIp;
+    public void setInetIP(InetAddress inetIP) {
+        this.inetIP = inetIP;
     }
 
-    public InetAddress formatIp(String ip) throws UnknownHostException {
-        InetAddress tempIp = InetAddress.getByName(ip);
-        return tempIp;
-    }
-
-    public String getsDate() {
-        return sDate;
-    }
-
-    public void setsDate(String sDate) {
-        this.sDate = sDate;
+    public InetAddress formatIP(String ip) throws UnknownHostException {
+        InetAddress tempIP = InetAddress.getByName(ip);
+        return tempIP;
     }
 
     public Date getdDate() {
@@ -60,11 +49,10 @@ public class Entries {
         this.dDate = dDate;
     }
 
-    public Date formatDate(String sDate) throws ParseException {
+    public Date formatDate(String date) throws ParseException {
        SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss");
-        Date test = formatter.parse(sDate);
-
-        return test;
+       Date tempDate = formatter.parse(date);
+       return tempDate;
     }
 
     public String getMethod() {
@@ -118,8 +106,7 @@ public class Entries {
     @Override
     public String toString() {
         return "Entries{" +
-                "ip=" + iIp +
-                ", date='" + sDate + '\'' +
+                "ip=" + inetIP +
                 ", method='" + method + '\'' +
                 ", response=" + response +
                 ", responseLength=" + responseLength +

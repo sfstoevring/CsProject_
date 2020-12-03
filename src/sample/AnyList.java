@@ -25,6 +25,10 @@ public class AnyList<T> {
         return anyList;
     }
 
+    public int getSize(){
+        return this.anyList.size();
+    }
+
 
 
 }

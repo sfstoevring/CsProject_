@@ -7,6 +7,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 
 import java.net.UnknownHostException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 
 public class Controller {
@@ -77,22 +79,20 @@ public class Controller {
     public ComboBox tabMethodComboBoxVisualizeMethod;
     public Button tabMethodButtonVisualizeMethod;
 
+    private QueryWriter queryWriter = new QueryWriter();
     // List fields
     //
     private AnyList<Entry> listOfEntries = new AnyList<>("ListOfEntries");
     private AnyList<Error> listOfErrors = new AnyList<>("ListOfErrors");
     private AnyList<Bubble> listOfBubbles = new AnyList<>("ListOfBubbles");
-
-    public void initialize() throws ParseException, UnknownHostException {
-        Entry testEntry = new Entry("127.0.0.1","27/nov/2020:12:13:14","get",123,123,"lars","prut",80, 0);
-        Entry testEntry2 = new Entry("127.0.0.2","27/nov/2020:22:22:22","get",22,22,"lars","prut",22, 1);
-
-        Error testError = new Error("Fejl, min ven", 0);
-        Bubble bubble = new Bubble("John", 80, 5, 5, "BLAAAAAAAAACK", 0);
-        addToList(testEntry);
-        addToList(testEntry2);
-        addToList(testError);
-        addToList(bubble);
+    private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
+    public void initialize() throws ParseException, UnknownHostException, SQLException {
+        createEntryObjectsFromDatabase();
+        createErrorObjectsFromDatabase();
+        System.out.println(listOfErrors.getSize());
+        System.out.println(listOfEntries.getSize());
+        System.out.println(listOfErrors.getFromList().get(0).getErrorMsg());
+        System.out.println(listOfEntries.getFromList().get(0).getID()+"    "+ listOfEntries.getFromList().get(0).getdDate());
     }
 
     // Funktioner til Anylist-stuffz
@@ -115,7 +115,37 @@ public class Controller {
         } else{
             System.out.println("Could not add object of type " + object.getClass() + " to any of the lists of type AnyList");
         }
+
     }
+
+
+    public void createErrorObjectsFromDatabase() throws ParseException, UnknownHostException, SQLException {
+        ResultSet resultSet = queryWriter.initResultSetToObjects(url, "ERROR");
+        while (resultSet.next()){
+            Error errortest2 = new Error();
+            errortest2.setID(resultSet.getInt("ID"));
+            errortest2.setErrorMsg(resultSet.getString("ERRORSTRING"));
+            addToList(errortest2);
+        }
+    }
+
+    public void createEntryObjectsFromDatabase() throws SQLException, ParseException, UnknownHostException {
+        ResultSet resultSet1 = queryWriter.initResultSetToObjects(url, "DATA");
+        while (resultSet1.next()){
+            Entry entry = new Entry();
+            entry.setID(resultSet1.getInt("ID"));
+            entry.setInetIP(resultSet1.getString("IP"));
+            entry.setdDate(resultSet1.getString("TIME"));
+            entry.setMethod(resultSet1.getString("REQUEST"));
+            entry.setResponse(resultSet1.getInt("RESPONSE"));
+            entry.setResponseLength(resultSet1.getInt("RESPONSE_LEN"));
+            entry.setFromPage(resultSet1.getString("FROM_SYS"));
+            entry.setClient(resultSet1.getString("FROM_CLIENT"));
+            entry.setPort(resultSet1.getInt("PORT"));
+            addToList(entry);
+        }
+    }
+
 
     public <T> void removeFromList(T object){
 

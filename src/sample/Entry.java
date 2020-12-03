@@ -16,8 +16,9 @@ public class Entry {
     private String fromPage;
     private String client;
     private int port;
+    private int ID;
 
-    public Entry(String IP, String date, String method, int response, int responseLength, String fromPage, String client, int port) throws ParseException, UnknownHostException {
+    public Entry(String IP, String date, String method, int response, int responseLength, String fromPage, String client, int port, int ID) throws ParseException, UnknownHostException {
         this.inetIP = formatIP(IP);
         this.dDate = formatDate(date);
         this.method = method;
@@ -26,6 +27,7 @@ public class Entry {
         this.fromPage = fromPage;
         this.client = client;
         this.port = port;
+        this.ID = ID;
     }
 
     public InetAddress getInetIP() {
@@ -101,6 +103,14 @@ public class Entry {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     @Override

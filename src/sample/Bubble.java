@@ -6,13 +6,15 @@ public class Bubble {
     private int x;
     private int y;
     private String color;
+    private int ID;
 
-    public Bubble(String name, int size, int x, int y, String color) {
+    public Bubble(String name, int size, int x, int y, String color, int ID) {
         this.name = name;
         this.size = size;
         this.x = x;
         this.y = y;
         this.color = color;
+        this.ID = ID;
     }
 
     public String getName() {
@@ -53,6 +55,14 @@ public class Bubble {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     @Override

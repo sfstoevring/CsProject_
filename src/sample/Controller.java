@@ -77,16 +77,20 @@ public class Controller {
     public ComboBox tabMethodComboBoxVisualizeMethod;
     public Button tabMethodButtonVisualizeMethod;
 
+    // List fields
     //
     private AnyList<Entry> listOfEntries = new AnyList<>("ListOfEntries");
     private AnyList<Error> listOfErrors = new AnyList<>("ListOfErrors");
     private AnyList<Bubble> listOfBubbles = new AnyList<>("ListOfBubbles");
 
     public void initialize() throws ParseException, UnknownHostException {
-        Entry testEntry = new Entry("127.0.0.1","27/nov/2020:12:13:14","get",123,123,"lars","prut",80);
-        Error testError = new Error("Fejl, min ven");
-        Bubble bubble = new Bubble("John", 80, 5, 5, "BLAAAAAAAAACK");
+        Entry testEntry = new Entry("127.0.0.1","27/nov/2020:12:13:14","get",123,123,"lars","prut",80, 0);
+        Entry testEntry2 = new Entry("127.0.0.2","27/nov/2020:22:22:22","get",22,22,"lars","prut",22, 1);
+
+        Error testError = new Error("Fejl, min ven", 0);
+        Bubble bubble = new Bubble("John", 80, 5, 5, "BLAAAAAAAAACK", 0);
         addToList(testEntry);
+        addToList(testEntry2);
         addToList(testError);
         addToList(bubble);
     }
@@ -95,9 +99,9 @@ public class Controller {
     //
     public <T> void addToList(T object) throws ParseException, UnknownHostException {
         // Utility objects for comparing the object passed to the method
-        Entry tempEntry = new Entry("1.1.1.1","1/Jan/1111:11:11:11", "Test", 1, 1, "test", "Windows_ad_bad", 1);
-        Error tempError = new Error("Test Error");
-        Bubble tempBubble = new Bubble("testBubble", 1, 1, 1, "BLACK");
+        Entry tempEntry = new Entry("1.1.1.1","1/Jan/1111:11:11:11", "Test", 1, 1, "test", "Windows_ad_bad", 1, 0);
+        Error tempError = new Error("Test Error", 0);
+        Bubble tempBubble = new Bubble("testBubble", 1, 1, 1, "BLACK", 0);
 
         if(object.getClass().equals(tempEntry.getClass())){
             listOfEntries.addToList((Entry) object);
@@ -113,9 +117,10 @@ public class Controller {
         }
     }
 
-    public void removeFromList(){
+    public <T> void removeFromList(T object){
 
-
+        listOfEntries.removeFromList(((Entry) object));
+        System.out.println("Removed object");
     }
 
 

@@ -17,8 +17,14 @@ public class AnyList<T> {
         this.anyList.add(o);
     }
 
+    public void removeFromList(T o){
+        this.anyList.remove(o);
+    }
+
     public ObservableList<T> getFromList(){
         return anyList;
     }
+
+
 
 }

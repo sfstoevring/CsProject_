@@ -96,7 +96,7 @@ public class Controller {
     private String url = "jdbc:sqlite:/Users/magnus/Downloads/CsProject_/Database.db";
 
     /* Anders URL */
-    //private String url = "...";
+    //private String url = "jdbc:sqlite:C:/Users/ander/Documents/Intelli J saves/CS_exa/CsProject_/Database.db";
 
     public void initialize() throws ParseException, UnknownHostException, SQLException {
         createEntryObjectsFromDatabase();

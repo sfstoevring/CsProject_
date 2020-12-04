@@ -106,7 +106,7 @@ public class Controller {
     //private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
 
     /* Magnus URL */
-    private String url = "jdbc:sqlite:/Users/magnus/Downloads/CsProject_/Database.db";
+    private String url = "jdbc:sqlite:/Users/magnus/Documents/CsProject_/Database.db";
 
     /* Anders URL */
     //private String url = "jdbc:sqlite:C:/Users/ander/Documents/Intelli J saves/CS_exa/CsProject_/Database.db";

@@ -1,5 +1,8 @@
 package sample;
 
+
+import com.gluonhq.charm.glisten.control.ToggleButtonGroup;
+import javafx.event.ActionEvent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -21,7 +24,6 @@ public class Controller {
     public TableColumn tabHomeTableViewEntriesColumnRequest;
     public TableColumn tabHomeTableViewEntriesColumnPort;
     public TableColumn tabHomeTableViewEntriesColumnResponse;
-    public TableColumn tabHomeTableViewEntriesColumnClient;
     public TableView tabHomeTableViewServerStats;
     public TableColumn tabHomeTableViewServerStatsColumnTemp;
     public DatePicker tabHomeDatePickerGraphOfEntries;
@@ -78,6 +80,17 @@ public class Controller {
     public TableColumn tabMethodTabDatabaseTableViewDatabaseColumnClient;
     public ComboBox tabMethodComboBoxVisualizeMethod;
     public Button tabMethodButtonVisualizeMethod;
+    public Button tabGlobalTabDatabaseButtonReset;
+    public ToggleButtonGroup tabGlobalTabDatabaseToggleButtonGroupSearch; //charm-glisten.4.4.1.jar nødvendig for at køre det her
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonID;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonTimeStamp;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIP;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonPort;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonRequest;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponse;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClient;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonFromService;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseLength;
 
 
     private QueryWriter queryWriter = new QueryWriter();
@@ -163,6 +176,63 @@ public class Controller {
 
         listOfEntries.removeFromList(((Entry) object));
         System.out.println("Removed object");
+    }
+
+    public void tabHomeDatePickerGraphOfEntriesACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabHomeButtonGraphOfEntriesACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabHomeDatePickerGraphOfErrorsACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabHomeButtonGraphOfErrorsACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabHomeButtonKillServerACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabHomeButtonLoginToServerACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseButtonSearchACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseButtonResetACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIDACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonTimeStampACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIPACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonPortACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonRequestACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClientACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonFromServiceACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabMethodComboBoxVisualizeMethodACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabMethodButtonVisualizeMethodACTION(ActionEvent actionEvent) {
+    }
+
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseLengthACTION(ActionEvent actionEvent) {
     }
 
 

@@ -79,13 +79,25 @@ public class Controller {
     public ComboBox tabMethodComboBoxVisualizeMethod;
     public Button tabMethodButtonVisualizeMethod;
 
+
     private QueryWriter queryWriter = new QueryWriter();
     // List fields
     //
     private AnyList<Entry> listOfEntries = new AnyList<>("ListOfEntries");
     private AnyList<Error> listOfErrors = new AnyList<>("ListOfErrors");
     private AnyList<Bubble> listOfBubbles = new AnyList<>("ListOfBubbles");
-    private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
+    /* Jesper URL */
+    //private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
+
+    /* Simon URL */
+    //private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
+
+    /* Magnus URL */
+    private String url = "jdbc:sqlite:/Users/magnus/Downloads/CsProject_/Database.db";
+
+    /* Anders URL */
+    //private String url = "...";
+
     public void initialize() throws ParseException, UnknownHostException, SQLException {
         createEntryObjectsFromDatabase();
         createErrorObjectsFromDatabase();

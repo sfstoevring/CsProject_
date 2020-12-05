@@ -10,8 +10,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 
 import java.net.UnknownHostException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.ParseException;
 
 public class Controller {
@@ -99,25 +98,41 @@ public class Controller {
     private AnyList<Entry> listOfEntries = new AnyList<>("ListOfEntries");
     private AnyList<Error> listOfErrors = new AnyList<>("ListOfErrors");
     private AnyList<Bubble> listOfBubbles = new AnyList<>("ListOfBubbles");
+    private String[] listOfMethods;
+
+    //Test stuffzz
+    TypeGET typeGET = new TypeGET();
+
     /* Jesper URL */
     //private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
 
     /* Simon URL */
-    //private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
+    private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
 
     /* Magnus URL */
-    private String url = "jdbc:sqlite:/Users/magnus/Documents/CsProject_/Database.db";
+    //private String url = "jdbc:sqlite:/Users/magnus/Documents/CsProject_/Database.db";
 
     /* Anders URL */
     //private String url = "jdbc:sqlite:C:/Users/ander/Documents/Intelli J saves/CS_exa/CsProject_/Database.db";
 
+
+    Bubble bubble = new Bubble("testBubble","Blaaaack",0);
+
     public void initialize() throws ParseException, UnknownHostException, SQLException {
         createEntryObjectsFromDatabase();
         createErrorObjectsFromDatabase();
-        System.out.println(listOfErrors.getSize());
-        System.out.println(listOfEntries.getSize());
-        System.out.println(listOfErrors.getFromList().get(0).getErrorMsg());
-        System.out.println(listOfEntries.getFromList().get(0).getID()+"    "+ listOfEntries.getFromList().get(0).getdDate());
+
+
+
+        makeListOfMethods();
+        /**
+         * listOfMethods skal trigge bubbles til at blvie populated med de rigtige Method.childs
+         *
+         * måske skal listOfMethods laves om til et objekt så det kan kaldes alle mulige steder...
+         */
+
+        //populateBubbleLists(typeGET);
+        //System.out.println("Virk nu forhelvede");
     }
 
     // Funktioner til Anylist-stuffz
@@ -126,7 +141,7 @@ public class Controller {
         // Utility objects for comparing the object passed to the method
         Entry tempEntry = new Entry("1.1.1.1","1/Jan/1111:11:11:11", "Test", 1, 1, "test", "Windows_ad_bad", 1, 0);
         Error tempError = new Error("Test Error", 0);
-        Bubble tempBubble = new Bubble("testBubble", 1, 1, 1, "BLACK", 0);
+        Bubble tempBubble = new Bubble("testBubble", "BLACK", 0);
 
         if(object.getClass().equals(tempEntry.getClass())){
             listOfEntries.addToList((Entry) object);
@@ -161,13 +176,32 @@ public class Controller {
             entry.setID(resultSet1.getInt("ID"));
             entry.setInetIP(resultSet1.getString("IP"));
             entry.setdDate(resultSet1.getString("TIME"));
-            entry.setMethod(resultSet1.getString("REQUEST"));
+            entry.setMethod(resultSet1.getString("METHOD"));
+            entry.setRequest(resultSet1.getString("REQUEST"));
             entry.setResponse(resultSet1.getInt("RESPONSE"));
             entry.setResponseLength(resultSet1.getInt("RESPONSE_LEN"));
             entry.setFromPage(resultSet1.getString("FROM_SYS"));
             entry.setClient(resultSet1.getString("FROM_CLIENT"));
             entry.setPort(resultSet1.getInt("PORT"));
             addToList(entry);
+        }
+    }
+
+    public void populateBubbleLists(Method methodChild) throws SQLException {
+        ResultSet rs = queryWriter.listOfMethods(url);
+        while (rs.next()) {
+            bubble.populateBubble(methodChild, rs.getString("METHOD"), listOfEntries );
+        }
+    }
+
+    public void makeListOfMethods() throws  SQLException{
+        ResultSet rs = queryWriter.listOfMethods(url);
+        int i = 0;
+        listOfMethods = new String[8];
+        while (rs.next()) {
+            listOfMethods[i] = rs.getString("METHOD");
+            System.out.println("saved " + rs.getString("METHOD") + " in listOfMethods");
+            i++;
         }
     }
 

@@ -21,5 +21,11 @@ public class QueryWriter {
     return rs;
     }
 
+    public ResultSet listOfMethods(String url) throws SQLException {
+        Connect(url);
+        ResultSet rsMethods = conn.createStatement().executeQuery("SELECT METHOD FROM DATA GROUP BY METHOD");
+        return rsMethods;
+    }
+
 
 }

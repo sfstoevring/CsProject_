@@ -8,13 +8,20 @@ public class Bubble {
     private String color;
     private int ID;
 
-    public Bubble(String name, int size, int x, int y, String color, int ID) {
+
+    public Bubble(String name, String color, int ID) {
         this.name = name;
-        this.size = size;
-        this.x = x;
-        this.y = y;
         this.color = color;
         this.ID = ID;
+    }
+
+    public void populateBubble(Method methodChild, String databaseColumn, AnyList<Entry> anyList){
+        for (int i=0 ; i< anyList.getSize(); i++){
+            if (anyList.getFromList().get(i).getMethod().equalsIgnoreCase(methodChild.getName())){
+                methodChild.addToList(anyList.getFromList().get(i));
+                System.out.println("Added "+methodChild.getName()+" object to bubbleList: "+methodChild.getListName()+"");
+            }
+        }
     }
 
     public String getName() {

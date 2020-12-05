@@ -10,6 +10,7 @@ public class Entry {
 
     private InetAddress inetIP;
     private Date dDate;
+    private String request;
     private String method;
     private int response;
     private int responseLength;
@@ -66,6 +67,14 @@ public class Entry {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public String getRequest() {
+        return request;
+    }
+
+    public void setRequest(String request) {
+        this.request = request;
     }
 
     public int getResponse() {

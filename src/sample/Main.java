@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 
 import java.net.UnknownHostException;
 import java.text.ParseException;
-import java.util.ArrayList;
 
 
 public class Main extends Application {

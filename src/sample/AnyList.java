@@ -29,6 +29,10 @@ public class AnyList<T> {
         return this.anyList.size();
     }
 
+    public String getName(){
+        return this.name;
+    }
+
 
 
 }

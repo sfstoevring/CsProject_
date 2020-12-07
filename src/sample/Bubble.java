@@ -2,26 +2,18 @@ package sample;
 
 public class Bubble {
     private String name;
+    private String bubbleType;
     private int size;
     private int x;
     private int y;
     private String color;
     private int ID;
+    private Method methodType;
 
-
-    public Bubble(String name, String color, int ID) {
+    public Bubble(String name, int ID, String bubbleType) {
         this.name = name;
-        this.color = color;
         this.ID = ID;
-    }
-
-    public void populateBubble(Method methodChild, String databaseColumn, AnyList<Entry> anyList){
-        for (int i=0 ; i< anyList.getSize(); i++){
-            if (anyList.getFromList().get(i).getMethod().equalsIgnoreCase(methodChild.getName())){
-                methodChild.addToList(anyList.getFromList().get(i));
-                System.out.println("Added "+methodChild.getName()+" object to bubbleList: "+methodChild.getListName()+"");
-            }
-        }
+        this.bubbleType = bubbleType;
     }
 
     public String getName() {
@@ -30,6 +22,30 @@ public class Bubble {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBubbleType() {
+        return bubbleType;
+    }
+
+    public void setBubbleType(String bubbleType) {
+        this.bubbleType = bubbleType;
+    }
+
+    public Method getMethodType() {
+        return methodType;
+    }
+
+    public void setMethodType(Method methodType){
+        this.methodType = methodType;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public int getSize() {
@@ -64,13 +80,7 @@ public class Bubble {
         this.color = color;
     }
 
-    public int getID() {
-        return ID;
-    }
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
 
     @Override
     public String toString() {

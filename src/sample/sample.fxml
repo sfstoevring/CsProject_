@@ -150,12 +150,12 @@
                                           <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                                        </GridPane.margin>
                                     </Button>
-                                    <Label text="Errors today" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                    <Label text="Errors today:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                        <GridPane.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </GridPane.margin>
                                     </Label>
-                                    <Label text="Entries today" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                                    <Label text="Entries today:" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                                        <GridPane.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </GridPane.margin>

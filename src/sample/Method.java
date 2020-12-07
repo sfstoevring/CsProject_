@@ -17,15 +17,20 @@ public abstract class Method {
 
     public abstract void removeFromList(Entry entry);
 
+    public abstract AnyList<Entry> getList();
+
     public abstract String getListName();
 }
 
 class TypeGET extends Method{
-        private String name = "GET";
-        private int ID = 0;
-        private AnyList<Entry> list = new AnyList<>("methodAsBubble_GET");
+        private String name;
+        private int ID;
+        private AnyList<Entry> list;
 
     public TypeGET() {
+        this.name = "GET";
+        this.ID = 0;
+        this.list = new AnyList<>("listOfEntryObjects@_GET");
     }
 
     @Override
@@ -50,8 +55,7 @@ class TypeGET extends Method{
 
     @Override
     public void addToList(Entry entry) {
-        this.addToList(entry);
-
+        this.list.addToList(entry);
     }
 
     @Override
@@ -60,17 +64,26 @@ class TypeGET extends Method{
     }
 
     @Override
+    public AnyList<Entry> getList() {
+        return this.list;
+    }
+
+
+    @Override
     public String getListName() {
         return this.list.getName();
     }
 }
 
 class TypePOST extends Method{
-    private String name = "POST";
-    private int ID = 1;
-    private AnyList<Entry> list = new AnyList<>("methodAsBubble_POST");
+    private String name;
+    private int ID;
+    private AnyList<Entry> list;
 
     public TypePOST(){
+        this.name = "POST";
+        this.ID = 1;
+        this.list = new AnyList<>("listOfEntryObjects@_POST");
     }
 
     @Override
@@ -95,12 +108,17 @@ class TypePOST extends Method{
 
     @Override
     public void addToList(Entry entry) {
-        list.addToList(entry);
+        this.list.addToList(entry);
     }
 
     @Override
     public void removeFromList(Entry entry) {
         list.removeFromList(entry);
+    }
+
+    @Override
+    public AnyList<Entry> getList() {
+        return this.list;
     }
 
     @Override
@@ -109,14 +127,16 @@ class TypePOST extends Method{
     }
 }
 
-class TypeCONNECTION extends Method{
-    private String name = "CONNECTION";
-    private int ID = 2;
-    private AnyList<Entry> list = new AnyList<>("methodAsBubble_CONNECTION");
+class TypeCONNECT extends Method{
+    private String name;
+    private int ID;
+    private AnyList<Entry> list;
 
-    public TypeCONNECTION(){
+    public TypeCONNECT() {
+        this.name = "CONNECT";
+        this.ID = 2;
+        this.list = new AnyList<>("listOfEntryObjects@_CONNECT");
     }
-
     @Override
     public String getName() {
         return this.name;
@@ -139,12 +159,17 @@ class TypeCONNECTION extends Method{
 
     @Override
     public void addToList(Entry entry) {
-        list.addToList(entry);
+        this.list.addToList(entry);
     }
 
     @Override
     public void removeFromList(Entry entry) {
         list.removeFromList(entry);
+    }
+
+    @Override
+    public AnyList<Entry> getList() {
+        return this.list;
     }
 
     @Override
@@ -154,11 +179,14 @@ class TypeCONNECTION extends Method{
 }
 
 class TypeHEAD extends Method{
-    private String name = "HEAD";
-    private int ID = 3;
-    private AnyList<Entry> list = new AnyList<>("methodAsBubble_HEAD");
+    private String name;
+    private int ID;
+    private AnyList<Entry> list;
 
     public TypeHEAD(){
+        this.name = "HEAD";
+        this.ID = 3;
+        this.list = new AnyList<>("listOfEntryObjects@_HEAD");
     }
 
     @Override
@@ -183,12 +211,17 @@ class TypeHEAD extends Method{
 
     @Override
     public void addToList(Entry entry) {
-        list.addToList(entry);
+        this.list.addToList(entry);
     }
 
     @Override
     public void removeFromList(Entry entry) {
         list.removeFromList(entry);
+    }
+
+    @Override
+    public AnyList<Entry> getList() {
+        return this.list;
     }
 
     @Override
@@ -198,11 +231,14 @@ class TypeHEAD extends Method{
 }
 
 class TypePROPFIND extends Method{
-    private String name = "PROPFIND";
-    private int ID = 4;
-    private AnyList<Entry> list = new AnyList<>("methodAsBubble_PROPFIND");
+    private String name;
+    private int ID;
+    private AnyList<Entry> list;
 
     public TypePROPFIND(){
+        this.name = "PROPFIND";
+        this.ID = 4;
+        this.list = new AnyList<>("listOfEntryObjects@_PROPFIND");
     }
 
     @Override
@@ -227,12 +263,17 @@ class TypePROPFIND extends Method{
 
     @Override
     public void addToList(Entry entry) {
-        list.addToList(entry);
+        this.list.addToList(entry);
     }
 
     @Override
     public void removeFromList(Entry entry) {
         list.removeFromList(entry);
+    }
+
+    @Override
+    public AnyList<Entry> getList() {
+        return this.list;
     }
 
     @Override
@@ -242,11 +283,14 @@ class TypePROPFIND extends Method{
 }
 
 class TypeASCII extends Method{
-    private String name = "ASCII";
-    private int ID = 5;
-    private AnyList<Entry> list = new AnyList<>("methodAsBubble_ASCII");
+    private String name;
+    private int ID;
+    private AnyList<Entry> list;
 
     public TypeASCII(){
+        this.name = "ASCII";
+        this.ID = 5;
+        this.list = new AnyList<>("listOfEntryObjects@_ASCII");
     }
 
     @Override
@@ -271,12 +315,17 @@ class TypeASCII extends Method{
 
     @Override
     public void addToList(Entry entry) {
-        list.addToList(entry);
+        this.list.addToList(entry);
     }
 
     @Override
     public void removeFromList(Entry entry) {
         list.removeFromList(entry);
+    }
+
+    @Override
+    public AnyList<Entry> getList() {
+        return this.list;
     }
 
     @Override
@@ -286,11 +335,14 @@ class TypeASCII extends Method{
 }
 
 class TypeOPTIONS extends Method{
-    private String name = "OPTIONS";
-    private int ID = 6;
-    private AnyList<Entry> list = new AnyList<>("methodAsBubble_OPTIONS");
+    private String name ;
+    private int ID;
+    private AnyList<Entry> list;
 
     public TypeOPTIONS(){
+        this.name = "OPTIONS";
+        this.ID = 6;
+        this.list = new AnyList<>("listOfEntryObjects@_OPTIONS");
     }
 
     @Override
@@ -315,12 +367,17 @@ class TypeOPTIONS extends Method{
 
     @Override
     public void addToList(Entry entry) {
-        list.addToList(entry);
+        this.list.addToList(entry);
     }
 
     @Override
     public void removeFromList(Entry entry) {
         list.removeFromList(entry);
+    }
+
+    @Override
+    public AnyList<Entry> getList() {
+        return this.list;
     }
 
     @Override
@@ -330,11 +387,14 @@ class TypeOPTIONS extends Method{
 }
 
 class TypeEMPTY extends Method{
-    private String name = "EMPTY";
-    private int ID = 7;
-    private AnyList<Entry> list = new AnyList<>("methodAsBubble_EMPTY");
+    private String name;
+    private int ID;
+    private AnyList<Entry> list;
 
     public TypeEMPTY(){
+        this.name = "EMPTY";
+        this.ID = 7;
+        this.list = new AnyList<>("listOfEntryObjects@_EMPTY");
     }
 
     @Override
@@ -359,12 +419,17 @@ class TypeEMPTY extends Method{
 
     @Override
     public void addToList(Entry entry) {
-        list.addToList(entry);
+        this.list.addToList(entry);
     }
 
     @Override
     public void removeFromList(Entry entry) {
         list.removeFromList(entry);
+    }
+
+    @Override
+    public AnyList<Entry> getList() {
+        return this.list;
     }
 
     @Override

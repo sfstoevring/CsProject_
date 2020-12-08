@@ -34,5 +34,7 @@ public class AnyList<T> {
     }
 
 
-
+    public void clearList() {
+        this.anyList.clear();
+    }
 }

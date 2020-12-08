@@ -1,3 +1,15 @@
+/**
+ * !!!
+ * Remember to add:
+ *      - SDK lib
+ *      - GLUON.jar-file
+ *
+ *
+ * Change path for the VM
+ * Change path for the Database
+ * !!!
+ */
+
 package sample;
 
 import com.gluonhq.charm.glisten.control.ToggleButtonGroup;
@@ -9,12 +21,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import javafx.scene.chart.*;
-
 import javafx.scene.paint.Color;
-
-
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.text.ParseException;
@@ -86,7 +94,7 @@ public class Controller {
     public ComboBox tabMethodComboBoxVisualizeMethod;
     public Button tabMethodButtonVisualizeMethod;
     public Button tabGlobalTabDatabaseButtonReset;
-    public ToggleButtonGroup tabGlobalTabDatabaseToggleButtonGroupSearch; //charm-glisten.4.4.1.jar nødvendig for at køre det her
+    public ToggleButtonGroup tabGlobalTabDatabaseToggleButtonGroupSearch; //Needs charm-glisten.4.4.1.jar to run properly
     public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonID;
     public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonTimeStamp;
     public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIP;
@@ -123,18 +131,22 @@ public class Controller {
     public CategoryAxis tabGlobalTabTopAttackerBarChartTopAttackerX;
     public NumberAxis tabGlobalTabTopAttackerBarChartTopAttackerY;
 
-
     private QueryWriter queryWriter = new QueryWriter();
+
+
+//    private AnyList<MethodTabTableViewObjects> listOfMethodTabTableViewObjects = new AnyList<>("ListOfMethodTabTableViewObjects");
+//    private AnyList<HomeTabTableViewObjects> listOfHomeTabTableViewObjects = new AnyList<>("ListOfHomeTabTableViewObjects");
+//    private AnyList<GlobalTabTableViewObjects> listOfGlobalTabTableViewObjects = new AnyList<>("ListOfGlobalTabTableViewObjects");
+
     // List fields
     //
     private AnyList<Entry> listOfEntries = new AnyList<>("ListOfEntries");
     private AnyList<Error> listOfErrors = new AnyList<>("ListOfErrors");
     private AnyList<Bubble> listOfBubbles = new AnyList<>("ListOfBubbles");
     private AnyList<Method> listOfMethodTypes = new AnyList<>("ListOfMethodTypes");
-    private AnyList<MethodTabTableViewObjects> listOfMethodTabTableViewObjects = new AnyList<>("ListOfMethodTabTableViewObjects");
-    private AnyList<HomeTabTableViewObjects> listOfHomeTabTableViewObjects = new AnyList<>("ListOfHomeTabTableViewObjects");
-    private AnyList<GlobalTabTableViewObjects> listOfGlobalTabTableViewObjects = new AnyList<>("ListOfGlobalTabTableViewObjects");
-
+    private AnyList<TableViewObjects> listOfTableViewObjectsAtTabHome = new AnyList<>("ListOfTableViewObjects@Tab_Home");
+    private AnyList<TableViewObjects> listOfTableViewObjectsAtTabGlobal = new AnyList<>("ListOfTableViewObjects@Tab_Global");
+    private AnyList<TableViewObjects> listOfTableViewObjectsAtTabMethod = new AnyList<>("ListOfTableViewObjects@Tab_Method");
     private String[] listOfMethods = new String[8];
 
     /* Jesper URL */
@@ -149,24 +161,38 @@ public class Controller {
     /* Anders URL */
     //private String url = "jdbc:sqlite:C:/Users/ander/Documents/Intelli J saves/CS_exa/CsProject_/Database.db";
 
+
+
+
+
+
+
+
+
+
     public void initialize() throws ParseException, UnknownHostException, SQLException {
 
         setPropertyValueFactories();
-
-        createListOfMethods(); //Laver liste over Methoder der er fundet i databasen
-        createMethodObjects(); //opretter metoder som objekter
-
-        createEntryObjectsFromDatabase();
-        createErrorObjectsFromDatabase();
-
-        populateMethodObjects(); //Gemmer entryObjekter med GET, POST osv i de rigtige MethodObjects
-
-        populateHomeTabTableView();
-        populateGlobalTabTableView();
-        populateMethodTabTableView();
-
+        createEntriesAsObjectsFromDatabase();
+        createErrorsAsObjectsFromDatabase();
+        createListOfMethods();
+        createMethodsAsObjects();
+        populateMethodObjects();
         createBubbles();
         populateBubbles();
+        populateHomeTabTableView2();
+        populateGlobalTabTableView2();
+        populateMethodTabTableView2();
+
+        //populateHomeTabTableView();
+        //populateGlobalTabTableView();
+        //populateMethodTabTableView();
+
+
+
+
+
+
 
         for (int i = 0; i < listOfMethodTypes.getSize(); i++){
             System.out.println(listOfMethodTypes.getFromList().get(i).getListName() + " size: " + listOfMethodTypes.getFromList().get(i).getList().getSize());
@@ -184,63 +210,54 @@ public class Controller {
             bubbles.fillOval(tabOverviewCanvas.getWidth() / 2, tabOverviewCanvas.getHeight() / 2, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1);
         }
 
+//
+//        //graph
+//        tabOverviewBarChartX.setLabel("IP-address");
+//        tabOverviewBarChartThreatsY.setLabel("Hits");
+//
+//        XYChart.Series<String, Number> series1 = new XYChart.Series();
+//
+//        for(int i = 0 ; i<listOfBubbles.getSize() ; i++) {
+//            series1.getData().addAll(new XYChart.Data(listOfBubbles.getFromList().get(i).getMethodType().getName(), listOfBubbles.getFromList().get(i).getMethodType().getList().getSize()));
+//
+//        }
+//
+//        tabOverviewBarChartThreats.getData().add(series1);
 
-        //graph
-        tabOverviewBarChartX.setLabel("IP-address");
-        tabOverviewBarChartThreatsY.setLabel("Hits");
-
-        XYChart.Series<String, Number> series1 = new XYChart.Series();
-
-        for(int i = 0 ; i<listOfBubbles.getSize() ; i++) {
-            series1.getData().addAll(new XYChart.Data(listOfBubbles.getFromList().get(i).getMethodType().getName(), listOfBubbles.getFromList().get(i).getMethodType().getList().getSize()));
-
-        }
-
-        tabOverviewBarChartThreats.getData().add(series1);
-
-
-
-
-        /**
-         *
-         * Bubbles indeholder method.childs
-         *
-         * method.childs indeholder Entry-objekter
-         *
-         * Method childs skal sortere Entry-objekterne og deres respektive requesttypes
-         *
-         * De forskellige requesttypes skal gemmes i en list{list{}, list{}, list{}, ...}
-         *
-         *
-         *
-         *
-         * Method_Error skal indeholde errorobjekter ligesom de andre MethodTypes
-         *
-         * skal også gemmes i en boble
-         *
-         */
-
-        /**
-         * Bubbles skal opretes med ét indbygget method.child > Dette skal gøres dynamisk
-         */
     }
 
-    //* Functions *//
+    //* Methods *//
 
     /**
-     * Creates ErrorObjects from database
-     * @throws ParseException
-     * @throws UnknownHostException
-     * @throws SQLException
+     * Prepares the rows and columns in GUI
      */
-    public void createErrorObjectsFromDatabase() throws ParseException, UnknownHostException, SQLException {
-        ResultSet resultSet = queryWriter.initResultSetToObjects(url, "ERROR");
-        while (resultSet.next()){
-            Error error = new Error();
-            error.setID(resultSet.getInt("ID"));
-            error.setErrorMsg(resultSet.getString("ERRORSTRING"));
-            addToList(error);
-        }
+    public void setPropertyValueFactories(){
+        //TabHome
+        tabHomeTableViewEntriesColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("TIME"));
+        tabHomeTableViewEntriesColumnIP.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("IP"));
+        tabHomeTableViewEntriesColumnPort.setCellValueFactory(new PropertyValueFactory<TableViewObjects, Integer>("PORT"));
+        tabHomeTableViewEntriesColumnMethod.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("METHOD"));
+        tabHomeTableViewEntriesColumnRequest.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("REQUEST"));
+        tabHomeTableViewEntriesColumnResponse.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("RESPONSE"));
+        //TabGlobal
+        tabGlobalTabDatabaseTableViewDatabaseColumnID.setCellValueFactory(new PropertyValueFactory<TableViewObjects, Integer>("ID"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("TIME"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnIP.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("IP"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnPort.setCellValueFactory(new PropertyValueFactory<TableViewObjects, Integer>("PORT"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnMethod.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("METHOD"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnRequest.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("REQUEST"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnResponse.setCellValueFactory(new PropertyValueFactory<TableViewObjects, Integer>("RESPONSE"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnResponseLength.setCellValueFactory(new PropertyValueFactory<TableViewObjects, Integer>("RESPONSE_LEN"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnClient.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("FROM_CLIENT"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnFromService.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("FROM_SYS"));
+        //TabMethod
+        tabMethodTabDatabaseTableViewDatabaseColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("TIME"));
+        tabMethodTabDatabaseTableViewDatabaseColumnPort.setCellValueFactory(new PropertyValueFactory<TableViewObjects, Integer>("PORT"));
+        tabMethodTabDatabaseTableViewDatabaseColumnIP.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("IP"));
+        tabMethodTabDatabaseTableViewDatabaseColumnMethod.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("METHOD"));
+        tabMethodTabDatabaseTableViewDatabaseColumnRequest.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("REQUEST"));
+        tabMethodTabDatabaseTableViewDatabaseColumnResponse.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("RESPONSE"));
+        tabMethodTabDatabaseTableViewDatabaseColumnClient.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("CLIENT"));
     }
 
     /**
@@ -249,7 +266,7 @@ public class Controller {
      * @throws ParseException
      * @throws UnknownHostException
      */
-    public void createEntryObjectsFromDatabase() throws SQLException, ParseException, UnknownHostException {
+    public void createEntriesAsObjectsFromDatabase() throws SQLException, ParseException, UnknownHostException {
         ResultSet resultSet1 = queryWriter.initResultSetToObjects(url, "DATA");
         while (resultSet1.next()){
             Entry entry = new Entry();
@@ -263,69 +280,30 @@ public class Controller {
             entry.setFromPage(resultSet1.getString("FROM_SYS"));
             entry.setClient(resultSet1.getString("FROM_CLIENT"));
             entry.setPort(resultSet1.getInt("PORT"));
-            addToList(entry);
+            listOfEntries.addToList(entry);
         }
     }
 
     /**
-     * Adds 'generic' objects to certain lists
-     * @param object
-     * @param <T>
+     * Creates ErrorObjects from database
      * @throws ParseException
      * @throws UnknownHostException
+     * @throws SQLException
      */
-    public <T> void addToList(T object) throws ParseException, UnknownHostException {
-        // Utility objects for comparing the object passed to the method
-        Entry tempEntry = new Entry("1.1.1.1","1/Jan/1111:11:11:11", "test", 1, 1, "test", "test", 1, 0);
-        Error tempError = new Error("Test Error", 0);
-        Bubble tempBubble = new Bubble("testBubble", 0, "test");
-        TypeASCII tempTypeASCII = new TypeASCII();
-        TypeCONNECT tempTypeCONNECTION = new TypeCONNECT();
-        TypeEMPTY tempTypeEMPTY = new TypeEMPTY();
-        TypeGET tempTypeGET = new TypeGET();
-        TypeHEAD tempTypeHEAD = new TypeHEAD();
-        TypeOPTIONS tempTypeOPTIONS = new TypeOPTIONS();
-        TypePOST tempTypePOST = new TypePOST();
-        TypePROPFIND tempTypePROPFIND = new TypePROPFIND();
-
-        if(object.getClass().equals(tempEntry.getClass())){
-            listOfEntries.addToList((Entry) object);
-            System.out.println("An Entry object was added to listOfEntries");
-        } else if(object.getClass().equals(tempError.getClass())){
-            listOfErrors.addToList(((Error) object));
-            System.out.println("An Error object was added to listOfErrors");
-        } else if(object.getClass().equals(tempBubble.getClass())){
-            listOfBubbles.addToList(((Bubble) object));
-            System.out.println("A Bubble object was added to listOfBubbles");
-        } else if(object.getClass().equals(tempTypeASCII.getClass())){
-            listOfMethodTypes.addToList(((TypeASCII) object));
-            System.out.println("A method of type " + tempTypeASCII.getName() + " object was added to listOfMethodTypes");
-        } else if(object.getClass().equals(tempTypeCONNECTION.getClass())){
-            listOfMethodTypes.addToList(((TypeCONNECT) object));
-            System.out.println("A method of type " + tempTypeCONNECTION.getName() + " object was added to listOfMethodTypes");
-        } else if(object.getClass().equals(tempTypeEMPTY.getClass())){
-            listOfMethodTypes.addToList(((TypeEMPTY) object));
-            System.out.println("A method of type " + tempTypeEMPTY.getName() + " object was added to listOfMethodTypes");
-        } else if(object.getClass().equals(tempTypeGET.getClass())){
-            listOfMethodTypes.addToList(((TypeGET) object));
-            System.out.println("A method of type " + tempTypeGET.getName() + " object was added to listOfMethodTypes");
-        } else if(object.getClass().equals(tempTypeHEAD.getClass())){
-            listOfMethodTypes.addToList(((TypeHEAD) object));
-            System.out.println("A method of type " + tempTypeHEAD.getName() + " object was added to listOfMethodTypes");
-        } else if(object.getClass().equals(tempTypeOPTIONS.getClass())){
-            listOfMethodTypes.addToList(((TypeOPTIONS) object));
-            System.out.println("A method of type " + tempTypeOPTIONS.getName() + " object was added to listOfMethodTypes");
-        } else if(object.getClass().equals(tempTypePOST.getClass())){
-            listOfMethodTypes.addToList(((TypePOST) object));
-            System.out.println("A method of type " + tempTypePOST.getName() + " object was added to listOfMethodTypes");
-        } else if(object.getClass().equals(tempTypePROPFIND.getClass())){
-            listOfMethodTypes.addToList(((TypePROPFIND) object));
-            System.out.println("A method of type " + tempTypePROPFIND.getName() + " object was added to listOfMethodTypes");
-        } else{
-            System.out.println("Could not add object of type " + object.getClass() + " to any of the lists of type AnyList");
+    public void createErrorsAsObjectsFromDatabase() throws SQLException {
+        ResultSet resultSet = queryWriter.initResultSetToObjects(url, "ERROR");
+        while (resultSet.next()){
+            Error error = new Error();
+            error.setID(resultSet.getInt("ID"));
+            error.setErrorMsg(resultSet.getString("ERRORSTRING"));
+            listOfErrors.addToList(error);
         }
     }
 
+    /**
+     * Creates a list of all the HTTP Request methods found in the database
+     * @throws SQLException
+     */
     public void createListOfMethods() throws  SQLException{
         ResultSet rs = queryWriter.listOfMethods(url);
         int i = 0;
@@ -336,25 +314,32 @@ public class Controller {
         }
     }
 
-    public void createMethodObjects() throws ParseException, UnknownHostException {
+    /**
+     * Instantiates HTTP request methods as objects
+     */
+    public void createMethodsAsObjects(){
         TypeASCII typeASCII = new TypeASCII();
-        addToList(typeASCII);
         TypeCONNECT typeCONNECTION = new TypeCONNECT();
-        addToList(typeCONNECTION);
         TypeEMPTY typeEMPTY = new TypeEMPTY();
-        addToList(typeEMPTY);
         TypeGET typeGET = new TypeGET();
-        addToList(typeGET);
         TypeHEAD typeHEAD = new TypeHEAD();
-        addToList(typeHEAD);
         TypeOPTIONS typeOPTIONS = new TypeOPTIONS();
-        addToList(typeOPTIONS);
         TypePOST typePOST = new TypePOST();
-        addToList(typePOST);
         TypePROPFIND typePROPFIND = new TypePROPFIND();
-        addToList(typePROPFIND);
+
+        listOfMethodTypes.addToList(typeASCII);
+        listOfMethodTypes.addToList(typeCONNECTION);
+        listOfMethodTypes.addToList(typeEMPTY);
+        listOfMethodTypes.addToList(typeGET);
+        listOfMethodTypes.addToList(typeHEAD);
+        listOfMethodTypes.addToList(typeOPTIONS);
+        listOfMethodTypes.addToList(typePOST);
+        listOfMethodTypes.addToList(typePROPFIND);
     }
 
+    /**
+     * Saves Entry objects in Method objects
+     */
     private void populateMethodObjects() {
         for (int i = 0; i < listOfEntries.getSize(); i++) { //gennemløber alle entries
             for (int j = 0; j < listOfMethodTypes.getSize(); j++) { //gennemløber alle metoder
@@ -368,6 +353,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Creates bubbles. Used for visuals in GUI
+     */
     public void createBubbles(){
         for (int i = 0; i < listOfMethods.length; i++){
             String name = "bubble" + listOfMethods[i];
@@ -377,6 +365,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Saves Method objects in Bubble object
+     */
     public void populateBubbles() {
         for (int i = 0; i < listOfBubbles.getSize(); i++) {
             for (int j = 0; j < listOfMethodTypes.getSize(); j++) {
@@ -388,55 +379,27 @@ public class Controller {
         }
     }
 
-    public void setPropertyValueFactories(){
-        tabHomeTableViewEntriesColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<HomeTabTableViewObjects, String>("TIME"));
-        tabHomeTableViewEntriesColumnIP.setCellValueFactory(new PropertyValueFactory<HomeTabTableViewObjects, String>("IP"));
-        tabHomeTableViewEntriesColumnPort.setCellValueFactory(new PropertyValueFactory<HomeTabTableViewObjects, Integer>("PORT"));
-        tabHomeTableViewEntriesColumnMethod.setCellValueFactory(new PropertyValueFactory<HomeTabTableViewObjects, String>("METHOD"));
-        tabHomeTableViewEntriesColumnRequest.setCellValueFactory(new PropertyValueFactory<HomeTabTableViewObjects, String>("REQUEST"));
-        tabHomeTableViewEntriesColumnResponse.setCellValueFactory(new PropertyValueFactory<HomeTabTableViewObjects, String>("RESPONSE"));
-
-        tabGlobalTabDatabaseTableViewDatabaseColumnID.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, Integer>("ID"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("TIME"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnIP.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("IP"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnPort.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, Integer>("PORT"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnMethod.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("METHOD"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnRequest.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("REQUEST"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnResponse.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, Integer>("RESPONSE"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnResponseLength.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, Integer>("RESPONSE_LEN"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnClient.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("FROM_CLIENT"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnFromService.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("FROM_SYS"));
-
-        tabMethodTabDatabaseTableViewDatabaseColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<MethodTabTableViewObjects, String>("TIME"));
-        tabMethodTabDatabaseTableViewDatabaseColumnPort.setCellValueFactory(new PropertyValueFactory<MethodTabTableViewObjects, Integer>("PORT"));
-        tabMethodTabDatabaseTableViewDatabaseColumnIP.setCellValueFactory(new PropertyValueFactory<MethodTabTableViewObjects, String>("IP"));
-        tabMethodTabDatabaseTableViewDatabaseColumnMethod.setCellValueFactory(new PropertyValueFactory<MethodTabTableViewObjects, String>("METHOD"));
-        tabMethodTabDatabaseTableViewDatabaseColumnRequest.setCellValueFactory(new PropertyValueFactory<MethodTabTableViewObjects, String>("REQUEST"));
-        tabMethodTabDatabaseTableViewDatabaseColumnResponse.setCellValueFactory(new PropertyValueFactory<MethodTabTableViewObjects, String>("RESPONSE"));
-        tabMethodTabDatabaseTableViewDatabaseColumnClient.setCellValueFactory(new PropertyValueFactory<MethodTabTableViewObjects, String>("CLIENT"));
-   }
-
-    public void populateHomeTabTableView() throws SQLException {
-        listOfHomeTabTableViewObjects.clearList();
+    private void populateHomeTabTableView2() throws SQLException {
+        listOfTableViewObjectsAtTabHome.clearList();
         ResultSet rsHomeTabTableView = queryWriter.resultSetForHomeTabTableView(url);
         while(rsHomeTabTableView.next()){
-            HomeTabTableViewObjects homeTab = new HomeTabTableViewObjects();
+            TableViewObjects homeTab = new TableViewObjects();
             homeTab.setTIME(rsHomeTabTableView.getString("TIME"));
             homeTab.setIP(rsHomeTabTableView.getString("IP"));
             homeTab.setPORT(rsHomeTabTableView.getInt("PORT"));
             homeTab.setMETHOD(rsHomeTabTableView.getString("METHOD"));
             homeTab.setREQUEST(rsHomeTabTableView.getString("REQUEST"));
-            homeTab.setRESPONSE(rsHomeTabTableView.getString("RESPONSE"));
-            listOfHomeTabTableViewObjects.addToList(homeTab);
+            homeTab.setsRESPONSE(rsHomeTabTableView.getString("RESPONSE"));
+            listOfTableViewObjectsAtTabHome.addToList(homeTab);
         }
-        tabHomeTableViewEntries.setItems(listOfHomeTabTableViewObjects.getFromList());
+        tabHomeTableViewEntries.setItems(listOfTableViewObjectsAtTabHome.getFromList());
     }
 
-    public void populateGlobalTabTableView() throws SQLException {
-        listOfGlobalTabTableViewObjects.clearList();
+    private void populateGlobalTabTableView2() throws SQLException {
+        listOfTableViewObjectsAtTabGlobal.clearList();
         ResultSet rsGlobalTabTableView = queryWriter.resultSetForGlobalTabTableView(url);
         while (rsGlobalTabTableView.next()){
-            GlobalTabTableViewObjects globalTab = new GlobalTabTableViewObjects();
+            TableViewObjects globalTab = new TableViewObjects();
             globalTab.setID(rsGlobalTabTableView.getInt("ID"));
             globalTab.setTIME(rsGlobalTabTableView.getString("TIME"));
             globalTab.setIP(rsGlobalTabTableView.getString("IP"));
@@ -447,27 +410,81 @@ public class Controller {
             globalTab.setRESPONSE_LEN(rsGlobalTabTableView.getInt("RESPONSE_LEN"));
             globalTab.setFROM_CLIENT(rsGlobalTabTableView.getString("FROM_CLIENT"));
             globalTab.setFROM_SYS(rsGlobalTabTableView.getString("FROM_SYS"));
-            listOfGlobalTabTableViewObjects.addToList(globalTab);
-
-        }tabGlobalTabDatabaseTableViewDatabase.setItems(listOfGlobalTabTableViewObjects.getFromList());
+            listOfTableViewObjectsAtTabGlobal.addToList(globalTab);
+        }
+        tabGlobalTabDatabaseTableViewDatabase.setItems(listOfTableViewObjectsAtTabGlobal.getFromList());
     }
 
-    public void populateMethodTabTableView() throws SQLException {
-        listOfMethodTabTableViewObjects.clearList();
+    private void populateMethodTabTableView2() throws SQLException {
+        listOfTableViewObjectsAtTabMethod.clearList();
         ResultSet rsMethodTabTableView = queryWriter.resultSetForMethodTabTableView(url);
         while(rsMethodTabTableView.next()){
-            MethodTabTableViewObjects methodTab = new MethodTabTableViewObjects();
+            TableViewObjects methodTab = new TableViewObjects();
             methodTab.setTIME(rsMethodTabTableView.getString("TIME"));
             methodTab.setIP(rsMethodTabTableView.getString("IP"));
             methodTab.setPORT(rsMethodTabTableView.getInt("PORT"));
             methodTab.setMETHOD(rsMethodTabTableView.getString("METHOD"));
             methodTab.setREQUEST(rsMethodTabTableView.getString("REQUEST"));
-            methodTab.setRESPONSE(rsMethodTabTableView.getString("RESPONSE"));
+            methodTab.setsRESPONSE(rsMethodTabTableView.getString("RESPONSE"));
             methodTab.setCLIENT(rsMethodTabTableView.getString("CLIENT"));
-            listOfMethodTabTableViewObjects.addToList(methodTab);
+            listOfTableViewObjectsAtTabMethod.addToList(methodTab);
         }
-        tabMethodTabDatabaseTableViewDatabase.setItems(listOfMethodTabTableViewObjects.getFromList());
+        tabMethodTabDatabaseTableViewDatabase.setItems(listOfTableViewObjectsAtTabMethod.getFromList());
+
     }
+
+//    public void populateHomeTabTableView() throws SQLException {
+//        listOfHomeTabTableViewObjects.clearList();
+//        ResultSet rsHomeTabTableView = queryWriter.resultSetForHomeTabTableView(url);
+//        while(rsHomeTabTableView.next()){
+//            HomeTabTableViewObjects homeTab = new HomeTabTableViewObjects();
+//            homeTab.setTIME(rsHomeTabTableView.getString("TIME"));
+//            homeTab.setIP(rsHomeTabTableView.getString("IP"));
+//            homeTab.setPORT(rsHomeTabTableView.getInt("PORT"));
+//            homeTab.setMETHOD(rsHomeTabTableView.getString("METHOD"));
+//            homeTab.setREQUEST(rsHomeTabTableView.getString("REQUEST"));
+//            homeTab.setRESPONSE(rsHomeTabTableView.getString("RESPONSE"));
+//            listOfHomeTabTableViewObjects.addToList(homeTab);
+//        }
+//        tabHomeTableViewEntries.setItems(listOfHomeTabTableViewObjects.getFromList());
+//    }
+//
+//    public void populateGlobalTabTableView() throws SQLException {
+//        listOfGlobalTabTableViewObjects.clearList();
+//        ResultSet rsGlobalTabTableView = queryWriter.resultSetForGlobalTabTableView(url);
+//        while (rsGlobalTabTableView.next()){
+//            GlobalTabTableViewObjects globalTab = new GlobalTabTableViewObjects();
+//            globalTab.setID(rsGlobalTabTableView.getInt("ID"));
+//            globalTab.setTIME(rsGlobalTabTableView.getString("TIME"));
+//            globalTab.setIP(rsGlobalTabTableView.getString("IP"));
+//            globalTab.setPORT(rsGlobalTabTableView.getInt("PORT"));
+//            globalTab.setMETHOD(rsGlobalTabTableView.getString("METHOD"));
+//            globalTab.setREQUEST(rsGlobalTabTableView.getString("REQUEST"));
+//            globalTab.setRESPONSE(rsGlobalTabTableView.getInt("RESPONSE"));
+//            globalTab.setRESPONSE_LEN(rsGlobalTabTableView.getInt("RESPONSE_LEN"));
+//            globalTab.setFROM_CLIENT(rsGlobalTabTableView.getString("FROM_CLIENT"));
+//            globalTab.setFROM_SYS(rsGlobalTabTableView.getString("FROM_SYS"));
+//            listOfGlobalTabTableViewObjects.addToList(globalTab);
+//        }
+//        tabGlobalTabDatabaseTableViewDatabase.setItems(listOfGlobalTabTableViewObjects.getFromList());
+//    }
+//
+//    public void populateMethodTabTableView() throws SQLException {
+//        listOfMethodTabTableViewObjects.clearList();
+//        ResultSet rsMethodTabTableView = queryWriter.resultSetForMethodTabTableView(url);
+//        while(rsMethodTabTableView.next()){
+//            MethodTabTableViewObjects methodTab = new MethodTabTableViewObjects();
+//            methodTab.setTIME(rsMethodTabTableView.getString("TIME"));
+//            methodTab.setIP(rsMethodTabTableView.getString("IP"));
+//            methodTab.setPORT(rsMethodTabTableView.getInt("PORT"));
+//            methodTab.setMETHOD(rsMethodTabTableView.getString("METHOD"));
+//            methodTab.setREQUEST(rsMethodTabTableView.getString("REQUEST"));
+//            methodTab.setRESPONSE(rsMethodTabTableView.getString("RESPONSE"));
+//            methodTab.setCLIENT(rsMethodTabTableView.getString("CLIENT"));
+//            listOfMethodTabTableViewObjects.addToList(methodTab);
+//        }
+//        tabMethodTabDatabaseTableViewDatabase.setItems(listOfMethodTabTableViewObjects.getFromList());
+//    }
 
 
 

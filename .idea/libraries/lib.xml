@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="file://$PATHTOFX$" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PATHTOFX$" />
+    </NATIVE>
+    <SOURCES>
+      <root url="file://$PATHTOFX$" />
+    </SOURCES>
+    <jarDirectory url="file://$PATHTOFX$" recursive="false" />
+    <jarDirectory url="file://$PATHTOFX$" recursive="false" type="SOURCES" />
+  </library>
+</component>

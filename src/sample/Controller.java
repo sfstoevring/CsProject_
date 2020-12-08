@@ -1,8 +1,6 @@
 package sample;
 
 import com.gluonhq.charm.glisten.control.ToggleButtonGroup;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,8 +15,6 @@ import javafx.scene.chart.*;
 import javafx.scene.paint.Color;
 
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.text.ParseException;
@@ -68,7 +64,7 @@ public class Controller {
     public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnRequest;
     public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnResponse;
     public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnClient;
-    public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnResponseLenght;
+    public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnResponseLength;
     public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnPort;
     public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnFromService;
     public TextField tabGlobalTabDatabaseTextFieldSearchBar;
@@ -103,6 +99,29 @@ public class Controller {
     public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnMethod;
     public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethod;
     public TableColumn tabMethodTabDatabaseTableViewDatabaseColumnMethod;
+    public CategoryAxis tabOverviewBarChartThreatsX;
+    public BarChart tabGlobalTabIPBarChartIP;
+    public CategoryAxis tabGlobalTabIPBarChartIPX;
+    public NumberAxis tabGlobalTabIPBarChartIPY;
+    public BarChart tabGlobalTabPortBarChartPort;
+    public CategoryAxis tabGlobalTabPortBarChartPortX;
+    public NumberAxis tabGlobalTabPortBarChartPortY;
+    public LineChart tabGlobalTabEntriesLineChartEntries;
+    public CategoryAxis tabGlobalTabEntriesLineChartEntriesX;
+    public NumberAxis tabGlobalTabEntriesLineChartEntriesY;
+    public LineChart tabGlobalTabErrorsLineChartErrors;
+    public CategoryAxis tabGlobalTabErrorsLineChartErrorsX;
+    public NumberAxis tabGlobalTabErrorsLineChartErrorsY;
+    public BarChart tabGlobalTabRiskMeasureBarChartRiskMeasure;
+    public CategoryAxis tabGlobalTabRiskMeasureBarChartRiskMeasureX;
+    public NumberAxis tabGlobalTabRiskMeasureBarChartRiskMeasureY;
+    public LineChart tabGlobalTabTrendsOverTimeLineChartTrendsOverTime;
+    public CategoryAxis tabGlobalTabTrendsOverTimeLineChartTrendsOverTimeX;
+    public NumberAxis tabGlobalTabTrendsOverTimeLineChartTrendsOverTimeY;
+    public PieChart tabGlobalTabLoginsPieChartLogins;
+    public BarChart tabGlobalTabTopAttackerBarChartTopAttacker;
+    public CategoryAxis tabGlobalTabTopAttackerBarChartTopAttackerX;
+    public NumberAxis tabGlobalTabTopAttackerBarChartTopAttackerY;
 
 
     private QueryWriter queryWriter = new QueryWriter();
@@ -119,10 +138,10 @@ public class Controller {
     private String[] listOfMethods = new String[8];
 
     /* Jesper URL */
-    private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
+    //private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
 
     /* Simon URL */
-    //private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
+    private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
 
     /* Magnus URL */
     //private String url = "jdbc:sqlite:/Users/magnus/Documents/CsProject_/Database.db";
@@ -166,6 +185,18 @@ public class Controller {
         }
 
 
+        //graph
+        tabOverviewBarChartX.setLabel("IP-address");
+        tabOverviewBarChartThreatsY.setLabel("Hits");
+
+        XYChart.Series<String, Number> series1 = new XYChart.Series();
+
+        for(int i = 0 ; i<listOfBubbles.getSize() ; i++) {
+            series1.getData().addAll(new XYChart.Data(listOfBubbles.getFromList().get(i).getMethodType().getName(), listOfBubbles.getFromList().get(i).getMethodType().getList().getSize()));
+
+        }
+
+        tabOverviewBarChartThreats.getData().add(series1);
 
 
 
@@ -372,7 +403,7 @@ public class Controller {
         tabGlobalTabDatabaseTableViewDatabaseColumnMethod.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("METHOD"));
         tabGlobalTabDatabaseTableViewDatabaseColumnRequest.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("REQUEST"));
         tabGlobalTabDatabaseTableViewDatabaseColumnResponse.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, Integer>("RESPONSE"));
-        tabGlobalTabDatabaseTableViewDatabaseColumnResponseLenght.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, Integer>("RESPONSE_LEN"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnResponseLength.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, Integer>("RESPONSE_LEN"));
         tabGlobalTabDatabaseTableViewDatabaseColumnClient.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("FROM_CLIENT"));
         tabGlobalTabDatabaseTableViewDatabaseColumnFromService.setCellValueFactory(new PropertyValueFactory<GlobalTabTableViewObjects, String>("FROM_SYS"));
 

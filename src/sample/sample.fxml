@@ -6,7 +6,9 @@
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -240,7 +242,7 @@
                         </Label>
                         <BarChart fx:id="tabOverviewBarChartThreats" GridPane.rowIndex="1">
                           <xAxis>
-                            <CategoryAxis fx:id="tabOverviewBarChartX" side="BOTTOM" />
+                            <CategoryAxis fx:id="tabOverviewBarChartThreatsX" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
                             <NumberAxis fx:id="tabOverviewBarChartThreatsY" side="LEFT" />
@@ -274,14 +276,14 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
+                                    <BarChart fx:id="tabGlobalTabIPBarChartIP" BorderPane.alignment="CENTER">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="tabGlobalTabIPBarChartIPX" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="tabGlobalTabIPBarChartIPY" side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
                                  </center>
                               </BorderPane>
                            </content>
@@ -290,14 +292,14 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
+                                    <BarChart fx:id="tabGlobalTabPortBarChartPort" BorderPane.alignment="CENTER">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="tabGlobalTabPortBarChartPortX" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="tabGlobalTabPortBarChartPortY" side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
                                  </center>
                               </BorderPane>
                            </content>
@@ -306,14 +308,14 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
+                                    <LineChart fx:id="tabGlobalTabEntriesLineChartEntries" BorderPane.alignment="CENTER">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="tabGlobalTabEntriesLineChartEntriesX" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="tabGlobalTabEntriesLineChartEntriesY" side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
                                  </center>
                               </BorderPane>
                            </content>
@@ -322,30 +324,14 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
-                                 </center>
-                              </BorderPane>
-                           </content>
-                        </Tab>
-                        <Tab fx:id="tabGlobalTabPackages" text="Packages">
-                           <content>
-                              <BorderPane prefHeight="520.0" prefWidth="1200.0">
-                                 <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
+                                    <LineChart fx:id="tabGlobalTabErrorsLineChartErrors" BorderPane.alignment="CENTER">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="tabGlobalTabErrorsLineChartErrorsX" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="tabGlobalTabErrorsLineChartErrorsY" side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
                                  </center>
                               </BorderPane>
                            </content>
@@ -354,14 +340,14 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
+                                    <BarChart fx:id="tabGlobalTabRiskMeasureBarChartRiskMeasure" BorderPane.alignment="CENTER">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="tabGlobalTabRiskMeasureBarChartRiskMeasureX" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="tabGlobalTabRiskMeasureBarChartRiskMeasureY" side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
                                  </center>
                               </BorderPane>
                            </content>
@@ -370,30 +356,14 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
-                                 </center>
-                              </BorderPane>
-                           </content>
-                        </Tab>
-                        <Tab fx:id="tabGlobalTabFirewallBlocks" text="Firewall Blocks">
-                           <content>
-                              <BorderPane prefHeight="520.0" prefWidth="1200.0">
-                                 <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
+                                    <LineChart fx:id="tabGlobalTabTrendsOverTimeLineChartTrendsOverTime" BorderPane.alignment="CENTER">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="tabGlobalTabTrendsOverTimeLineChartTrendsOverTimeX" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="tabGlobalTabTrendsOverTimeLineChartTrendsOverTimeY" side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
                                  </center>
                               </BorderPane>
                            </content>
@@ -402,14 +372,7 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
+                                    <PieChart fx:id="tabGlobalTabLoginsPieChartLogins" BorderPane.alignment="CENTER" />
                                  </center>
                               </BorderPane>
                            </content>
@@ -418,14 +381,14 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <AreaChart BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </AreaChart>
+                                    <BarChart fx:id="tabGlobalTabTopAttackerBarChartTopAttacker" BorderPane.alignment="CENTER">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="tabGlobalTabTopAttackerBarChartTopAttackerX" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="tabGlobalTabTopAttackerBarChartTopAttackerY" side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
                                  </center>
                               </BorderPane>
                            </content>
@@ -443,7 +406,7 @@
                                           <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnMethod" prefWidth="62.0" text="Method" />
                                           <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnRequest" prefWidth="167.0" text="Request" />
                                           <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnResponse" prefWidth="201.0" text="Response" />
-                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnResponseLenght" prefWidth="118.0" text="Respons Lenght" />
+                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnResponseLength" prefWidth="118.0" text="Response Length" />
                                           <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnClient" prefWidth="161.0" text="Client" />
                                           <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnFromService" prefWidth="145.0" text="From Service" />
                                       </columns>

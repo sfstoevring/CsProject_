@@ -1,13 +1,22 @@
 package sample;
 
 import com.gluonhq.charm.glisten.control.ToggleButtonGroup;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.scene.chart.*;
+
+import javafx.scene.paint.Color;
+
+
+import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.text.ParseException;
@@ -88,7 +97,10 @@ public class Controller {
     public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponse;
     public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClient;
     public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonFromService;
-    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseLength;
+    public TableColumn tabHomeTableViewEntriesColumnMethod;
+    public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnMethod;
+    public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethod;
+    public TableColumn tabMethodTabDatabaseTableViewDatabaseColumnMethod;
 
 
     private QueryWriter queryWriter = new QueryWriter();
@@ -113,6 +125,9 @@ public class Controller {
     //private String url = "jdbc:sqlite:C:/Users/ander/Documents/Intelli J saves/CS_exa/CsProject_/Database.db";
 
     public void initialize() throws ParseException, UnknownHostException, SQLException {
+
+        setPropertyValueFactories();
+
         createListOfMethods(); //Laver liste over Methoder der er fundet i databasen
         createMethodObjects(); //opretter metoder som objekter
 
@@ -135,6 +150,17 @@ public class Controller {
         tabHomeTextFieldErrorsToday.setText(new String (listOfErrors.getSize() + ""));
 
 
+        GraphicsContext bubbles = tabOverviewCanvas.getGraphicsContext2D();
+        bubbles.clearRect(0,0,tabOverviewCanvas.getWidth(),tabOverviewCanvas.getHeight());
+        for (int i = 0 ; i < listOfMethodTypes.getSize() ; i++) {
+            bubbles.setFill(Color.rgb(200, 200, 200, 0.8));
+            bubbles.fillOval(tabOverviewCanvas.getWidth() / 2, tabOverviewCanvas.getHeight() / 2, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1);
+        }
+
+
+
+
+
 
         /**
          *
@@ -145,6 +171,13 @@ public class Controller {
          * Method childs skal sortere Entry-objekterne og deres respektive requesttypes
          *
          * De forskellige requesttypes skal gemmes i en list{list{}, list{}, list{}, ...}
+         *
+         *
+         *
+         *
+         * Method_Error skal indeholde errorobjekter ligesom de andre MethodTypes
+         *
+         * skal også gemmes i en boble
          *
          */
 
@@ -316,6 +349,32 @@ public class Controller {
         }
     }
 
+    public void setPropertyValueFactories(){
+        tabHomeTableViewEntriesColumnIP.setCellValueFactory(new PropertyValueFactory<Entry, Inet4Address>("IP"));
+        tabHomeTableViewEntriesColumnPort.setCellValueFactory(new PropertyValueFactory<Entry, Integer>("PORT"));
+        tabHomeTableViewEntriesColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<Entry, Date>("TIME"));
+        tabHomeTableViewEntriesColumnMethod.setCellValueFactory(new PropertyValueFactory<Entry, Date>("METHOD"));
+        tabHomeTableViewEntriesColumnRequest.setCellValueFactory(new PropertyValueFactory<Entry, String>("REQUEST"));
+        tabHomeTableViewEntriesColumnResponse.setCellValueFactory(new PropertyValueFactory<Entry, String>("RESPONSE"));
+
+        tabGlobalTabDatabaseTableViewDatabaseColumnIP.setCellValueFactory(new PropertyValueFactory<Entry, Inet4Address>("IP"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnPort.setCellValueFactory(new PropertyValueFactory<Entry, Integer>("PORT"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<Entry, Date>("TIME"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnMethod.setCellValueFactory(new PropertyValueFactory<Entry, String>("METHOD"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnRequest.setCellValueFactory(new PropertyValueFactory<Entry, String>("REQUEST"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnResponse.setCellValueFactory(new PropertyValueFactory<Entry, Integer>("RESPONSE"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnResponseLenght.setCellValueFactory(new PropertyValueFactory<Entry, Integer>("RESPONSE_LEN"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnFromService.setCellValueFactory(new PropertyValueFactory<Entry, String>("FROM_SYS"));
+        tabGlobalTabDatabaseTableViewDatabaseColumnClient.setCellValueFactory(new PropertyValueFactory<Entry, String>("CLIENT"));
+
+        tabMethodTabDatabaseTableViewDatabaseColumnIP.setCellValueFactory(new PropertyValueFactory<Entry, Inet4Address>("IP"));
+        tabMethodTabDatabaseTableViewDatabaseColumnPort.setCellValueFactory(new PropertyValueFactory<Entry, Integer>("PORT"));
+        tabMethodTabDatabaseTableViewDatabaseColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<Entry, Date>("TIME"));
+        tabMethodTabDatabaseTableViewDatabaseColumnMethod.setCellValueFactory(new PropertyValueFactory<Entry, Date>("METHOD"));
+        tabMethodTabDatabaseTableViewDatabaseColumnRequest.setCellValueFactory(new PropertyValueFactory<Entry, String>("REQUEST"));
+        tabMethodTabDatabaseTableViewDatabaseColumnResponse.setCellValueFactory(new PropertyValueFactory<Entry, String>("RESPONSE"));
+    }
+
     public void tabHomeDatePickerGraphOfEntriesACTION(ActionEvent actionEvent) {
     }
 
@@ -370,6 +429,6 @@ public class Controller {
     public void tabMethodButtonVisualizeMethodACTION(ActionEvent actionEvent) {
     }
 
-    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseLengthACTION(ActionEvent actionEvent) {
+    public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethodACTION(ActionEvent actionEvent) {
     }
 }

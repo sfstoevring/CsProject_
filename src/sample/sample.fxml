@@ -52,11 +52,12 @@
                            <children>
                               <TableView fx:id="tabHomeTableViewEntries" prefHeight="200.0" prefWidth="914.0" GridPane.rowIndex="1">
                                 <columns>
+                                  <TableColumn fx:id="tabHomeTableViewEntriesColumnTimeStamp" prefWidth="198.0" text="Time Stamp" />
                                   <TableColumn fx:id="tabHomeTableViewEntriesColumnIP" prefWidth="158.0" text="IP" />
                                     <TableColumn fx:id="tabHomeTableViewEntriesColumnPort" prefWidth="63.0" text="Port" />
-                                  <TableColumn fx:id="tabHomeTableViewEntriesColumnTimeStamp" prefWidth="198.0" text="Time Stamp" />
-                                    <TableColumn fx:id="tabHomeTableViewEntriesColumnRequest" prefWidth="320.0" text="Request" />
-                                    <TableColumn fx:id="tabHomeTableViewEntriesColumnResponse" prefWidth="119.0" text="Response" />
+                                    <TableColumn fx:id="tabHomeTableViewEntriesColumnMethod" prefWidth="106.0" text="Method" />
+                                    <TableColumn fx:id="tabHomeTableViewEntriesColumnRequest" prefWidth="247.0" text="Request" />
+                                    <TableColumn fx:id="tabHomeTableViewEntriesColumnResponse" prefWidth="87.0" text="Response" />
                                 </columns>
                               </TableView>
                               <Label text="Most Recent Entries" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
@@ -439,11 +440,12 @@
                                           <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnTimeStamp" prefWidth="147.0" text="Time Stamp" />
                                         <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnIP" prefWidth="104.0" text="IP" />
                                           <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnPort" prefWidth="49.0" text="Port" />
-                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnRequest" prefWidth="294.0" text="Request" />
-                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnResponse" prefWidth="87.0" text="Response" />
+                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnMethod" prefWidth="62.0" text="Method" />
+                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnRequest" prefWidth="167.0" text="Request" />
+                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnResponse" prefWidth="201.0" text="Response" />
                                           <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnResponseLenght" prefWidth="118.0" text="Respons Lenght" />
-                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnClient" prefWidth="256.0" text="Client" />
-                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnFromService" prefWidth="102.0" text="From Service" />
+                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnClient" prefWidth="161.0" text="Client" />
+                                          <TableColumn fx:id="tabGlobalTabDatabaseTableViewDatabaseColumnFromService" prefWidth="145.0" text="From Service" />
                                       </columns>
                                     </TableView>
                                  </center>
@@ -459,15 +461,15 @@
                                        <children>
                                           <GridPane prefHeight="25.0" prefWidth="1172.0" GridPane.rowIndex="1">
                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1123.0" minWidth="10.0" prefWidth="612.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="1123.0" minWidth="10.0" prefWidth="452.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1123.0" minWidth="10.0" prefWidth="563.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="1123.0" minWidth="10.0" prefWidth="501.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="484.0" minWidth="0.0" prefWidth="136.0" />
                                             </columnConstraints>
                                             <rowConstraints>
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <TextField fx:id="tabGlobalTabDatabaseTextFieldSearchBar" prefHeight="25.0" prefWidth="431.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                                                <TextField fx:id="tabGlobalTabDatabaseTextFieldSearchBar" prefHeight="27.0" prefWidth="450.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                                                    <GridPane.margin>
                                                       <Insets />
                                                    </GridPane.margin>
@@ -515,6 +517,11 @@
                                                             <Label text="Port" />
                                                          </graphic>
                                                       </ToggleButton>
+                                                      <ToggleButton fx:id="tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethod" onAction="#tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethodACTION">
+                                                         <graphic>
+                                                            <Label text="Method" />
+                                                         </graphic>
+                                                      </ToggleButton>
                                                       <ToggleButton fx:id="tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonRequest" onAction="#tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonRequestACTION">
                                                          <graphic>
                                                             <Label text="Request" />
@@ -523,11 +530,6 @@
                                                       <ToggleButton fx:id="tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponse" onAction="#tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseACTION">
                                                          <graphic>
                                                             <Label text="Response" />
-                                                         </graphic>
-                                                      </ToggleButton>
-                                                      <ToggleButton fx:id="tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseLength" onAction="#tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseLengthACTION">
-                                                         <graphic>
-                                                            <Label text="Response Length" />
                                                          </graphic>
                                                       </ToggleButton>
                                                       <ToggleButton fx:id="tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClient" onAction="#tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClientACTION">
@@ -650,9 +652,10 @@
                                           <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnTimeStamp" prefWidth="114.0" text="Time Stamp" />
                                         <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnIP" prefWidth="75.0" text="IP" />
                                           <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnPort" prefWidth="64.0" text="Port" />
-                                          <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnRequest" prefWidth="590.0" text="Request" />
-                                          <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnResponse" minWidth="0.0" prefWidth="74.0" text="Response" />
-                                          <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnClient" prefWidth="282.0" text="Client" />
+                                          <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnMethod" prefWidth="64.0" text="Method" />
+                                          <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnRequest" prefWidth="241.0" text="Request" />
+                                          <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnResponse" minWidth="0.0" prefWidth="423.0" text="Response" />
+                                          <TableColumn fx:id="tabMethodTabDatabaseTableViewDatabaseColumnClient" minWidth="0.0" prefWidth="215.0" text="Client" />
                                       </columns>
                                     </TableView>
                                  </center>

@@ -33,7 +33,6 @@ public class AnyList<T> {
         return this.name;
     }
 
-
     public void clearList() {
         this.anyList.clear();
     }

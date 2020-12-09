@@ -30,6 +30,7 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.text.ParseException;
@@ -56,7 +57,7 @@ public class Controller {
     public TextField tabHomeTextFieldErrorsToday;
     public Tab tabOverview;
     public Canvas tabOverviewCanvas;
-    public BarChart<String, Number> tabOverviewBarChartThreats;
+    public BarChart tabOverviewBarChartThreats; //<String, Number>
     public CategoryAxis tabOverviewBarChartThreatsX;
     public NumberAxis tabOverviewBarChartThreatsY;
     public Tab tabGlobal;
@@ -199,7 +200,7 @@ public class Controller {
         setBarChartGraph(tabOverviewBarChartThreats, tabOverviewBarChartThreatsX, " ", tabOverviewBarChartThreatsY, " ", 0);
         setPieChartGraph(tabGlobalTabLoginsPieChartLogins);
         setLineChartGraph(tabGlobalTabEntriesLineChartEntries, tabGlobalTabEntriesLineChartEntriesX, " ", tabGlobalTabEntriesLineChartEntriesY, " ", 0);
-
+        //setBarChartGraph(tabGlobalTabIPBarChartIP, tabGlobalTabIPBarChartIPX, " ", tabGlobalTabIPBarChartIPY, " ", 1);
     }
 
     //* Methods *//
@@ -209,19 +210,29 @@ public class Controller {
         categoryAxis.setLabel(categoryAxisLabel);
         numberAxis.setLabel(numberAxisLabel);
 
-        XYChart.Series<String, Number> series1 = new XYChart.Series();
 
         switch (listSwitcher) {
             case 0:
+                XYChart.Series<String, Number> series = new XYChart.Series();
                 for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
                     System.out.println(i);
-                    series1.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(i).getName(), listOfMethodTypes.getFromList().get(i).getList().getSize()));
+                    series.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(i).getName(), listOfMethodTypes.getFromList().get(i).getList().getSize()));
                 }
+                barChart.getData().add(series);
                 break;
+
+            case 1:
+                XYChart.Series<InetAddress, Number> series1 = new XYChart.Series();
+                for (int i = 0; i < listOfEntries.getSize(); i++) {
+                    System.out.println(i);
+                    series1.getData().addAll(new XYChart.Data(listOfEntries.getFromList().get(i).getInetIP(), 100));
+                }
+                barChart.getData().add(series1);
+                break;
+
+
         }
 
-
-        barChart.getData().add(series1);
 
     }
 

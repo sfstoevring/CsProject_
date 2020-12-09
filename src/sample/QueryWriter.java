@@ -43,7 +43,7 @@ public class QueryWriter {
         Connect(url);
         String textFieldInput2 = "'%"+textFieldInput+"%'";
         System.out.println(textFieldInput2);
-        ResultSet rsGlobalTabUpdating = conn.createStatement().executeQuery("SELECT * FROM DATA WHERE '"+toggleButton+"' = '"+textFieldInput+"'");
+        ResultSet rsGlobalTabUpdating = conn.createStatement().executeQuery("SELECT * FROM DATA WHERE "+toggleButton+" LIKE '%"+textFieldInput+"%'");
         return rsGlobalTabUpdating;
     }
 

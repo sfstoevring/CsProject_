@@ -1,12 +1,13 @@
 /**
  * !!!
  * Remember to add:
- *      - SDK lib
- *      - GLUON.jar-file
+ *      - javafx SDK lib           (Project structure > Project Settings > Libraries > + > Java)
+ *      - GLUON.jar-file    (Project structure > Project Settings > Libraries > + > Java)
  *
  *
- * Change path for the VM
- * Change path for the Database
+ *
+ * Change path for the VM (Edit configurations > VM options:  "--module-path {Path to javafx SDK} --add-modules javafx.controls,javafx.fxml" )
+ * Change path for the Database @ line 152-162
  * !!!
  */
 

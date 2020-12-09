@@ -49,8 +49,8 @@ public class Controller {
     public TextField tabHomeTextFieldErrorsToday;
     public Tab tabOverview;
     public Canvas tabOverviewCanvas;
-    public BarChart tabOverviewBarChartThreats;
-    public CategoryAxis tabOverviewBarChartX;
+    public BarChart<String, Number> tabOverviewBarChartThreats;
+    public CategoryAxis tabOverviewBarChartThreatsX;
     public NumberAxis tabOverviewBarChartThreatsY;
     public Tab tabGlobal;
     public Tab tabGlobalTabMap;
@@ -107,7 +107,7 @@ public class Controller {
     public TableColumn tabGlobalTabDatabaseTableViewDatabaseColumnMethod;
     public ToggleButton tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethod;
     public TableColumn tabMethodTabDatabaseTableViewDatabaseColumnMethod;
-    public CategoryAxis tabOverviewBarChartThreatsX;
+
     public BarChart tabGlobalTabIPBarChartIP;
     public CategoryAxis tabGlobalTabIPBarChartIPX;
     public NumberAxis tabGlobalTabIPBarChartIPY;
@@ -150,10 +150,10 @@ public class Controller {
     private String[] listOfMethods = new String[8];
 
     /* Jesper URL */
-    //private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
+    private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
 
     /* Simon URL */
-    private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
+    //private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
 
     /* Magnus URL */
     //private String url = "jdbc:sqlite:/Users/magnus/Documents/CsProject_/Database.db";
@@ -210,23 +210,38 @@ public class Controller {
             bubbles.fillOval(tabOverviewCanvas.getWidth() / 2, tabOverviewCanvas.getHeight() / 2, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1);
         }
 
-//
-//        //graph
-//        tabOverviewBarChartX.setLabel("IP-address");
-//        tabOverviewBarChartThreatsY.setLabel("Hits");
-//
-//        XYChart.Series<String, Number> series1 = new XYChart.Series();
-//
-//        for(int i = 0 ; i<listOfBubbles.getSize() ; i++) {
-//            series1.getData().addAll(new XYChart.Data(listOfBubbles.getFromList().get(i).getMethodType().getName(), listOfBubbles.getFromList().get(i).getMethodType().getList().getSize()));
-//
-//        }
-//
-//        tabOverviewBarChartThreats.getData().add(series1);
+
+        //graph
+        tabOverviewBarChartThreatsX.setLabel("IP-address");
+        tabOverviewBarChartThreatsY.setLabel("Hits");
+
+        XYChart.Series<String, Number> series1 = new XYChart.Series();
+
+        for(int i = 0 ; i<listOfBubbles.getSize() ; i++) {
+            series1.getData().addAll(new XYChart.Data(listOfBubbles.getFromList().get(i).getMethodType().getName(), listOfBubbles.getFromList().get(i).getMethodType().getList().getSize()));
+
+        }
+
+        tabOverviewBarChartThreats.getData().add(series1);
 
     }
 
     //* Methods *//
+
+    public void setBarChartGraph(){
+        tabOverviewBarChartThreatsX.setLabel("IP-address");
+        tabOverviewBarChartThreatsY.setLabel("Hits");
+
+        XYChart.Series<String, Number> series1 = new XYChart.Series();
+
+        for(int i = 0 ; i<listOfBubbles.getSize() ; i++) {
+            series1.getData().addAll(new XYChart.Data(listOfBubbles.getFromList().get(i).getMethodType().getName(), listOfBubbles.getFromList().get(i).getMethodType().getList().getSize()));
+
+        }
+
+        tabOverviewBarChartThreats.getData().add(series1);
+
+    }
 
     /**
      * Prepares the rows and columns in GUI

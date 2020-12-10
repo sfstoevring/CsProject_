@@ -18,6 +18,7 @@ public class Entry {
     private String client;
     private int port;
     private int ID;
+    private String IPAsString;
 
     public Entry(){
     }
@@ -32,14 +33,18 @@ public class Entry {
         this.client = client;
         this.port = port;
         this.ID = ID;
+        this.IPAsString = IP;
     }
 
     public InetAddress getInetIP() {
         return inetIP;
     }
 
+    public String getIPAsString(){ return this.IPAsString; }
+
     public void setInetIP(String IP) throws UnknownHostException {
         this.inetIP = formatIP(IP);
+        this.IPAsString = IP;
     }
 
     public InetAddress formatIP(String ip) throws UnknownHostException {

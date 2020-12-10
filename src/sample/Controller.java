@@ -22,6 +22,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.chart.*;
@@ -138,6 +139,7 @@ public class Controller {
     public BarChart tabGlobalTabTopAttackerBarChartTopAttacker;
     public CategoryAxis tabGlobalTabTopAttackerBarChartTopAttackerX;
     public NumberAxis tabGlobalTabTopAttackerBarChartTopAttackerY;
+    public Label tabGlobalTabDatabaseLabelResultsCount;
 
     private QueryWriter queryWriter = new QueryWriter();
 
@@ -200,7 +202,7 @@ public class Controller {
         setBarChartGraph(tabOverviewBarChartThreats, tabOverviewBarChartThreatsX, " ", tabOverviewBarChartThreatsY, " ", 0);
         setPieChartGraph(tabGlobalTabLoginsPieChartLogins);
         setLineChartGraph(tabGlobalTabEntriesLineChartEntries, tabGlobalTabEntriesLineChartEntriesX, " ", tabGlobalTabEntriesLineChartEntriesY, " ", 0);
-        //setBarChartGraph(tabGlobalTabIPBarChartIP, tabGlobalTabIPBarChartIPX, " ", tabGlobalTabIPBarChartIPY, " ", 1);
+        setBarChartGraph(tabGlobalTabIPBarChartIP, tabGlobalTabIPBarChartIPX,"Bo", tabGlobalTabIPBarChartIPY, "Lis", 1);
     }
 
     //* Methods *//
@@ -210,30 +212,36 @@ public class Controller {
         categoryAxis.setLabel(categoryAxisLabel);
         numberAxis.setLabel(numberAxisLabel);
 
+        XYChart.Series<String, Number> series1 = new XYChart.Series();
 
         switch (listSwitcher) {
             case 0:
-                XYChart.Series<String, Number> series = new XYChart.Series();
                 for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
-                    System.out.println(i);
-                    series.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(i).getName(), listOfMethodTypes.getFromList().get(i).getList().getSize()));
+                    series1.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(i).getName(), listOfMethodTypes.getFromList().get(i).getList().getSize()));
                 }
-                barChart.getData().add(series);
                 break;
-
             case 1:
-                XYChart.Series<InetAddress, Number> series1 = new XYChart.Series();
-                for (int i = 0; i < listOfEntries.getSize(); i++) {
-                    System.out.println(i);
-                    series1.getData().addAll(new XYChart.Data(listOfEntries.getFromList().get(i).getInetIP(), 100));
+                for(int i = 0; i < listOfMethodTypes.getFromList().get(3).getList().getSize(); i++){
+                    series1.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(3).getList().getFromList().get(i).getIPAsString(), i*10));
                 }
-                barChart.getData().add(series1);
                 break;
-
-
         }
 
+        barChart.getData().addAll(series1);
 
+    }
+
+    public void setIPChart(BarChart barChart, CategoryAxis categoryAxis, String categoryAxisLabel, NumberAxis numberAxis, String numberAxisLabel) {
+
+        categoryAxis.setLabel(categoryAxisLabel);
+        numberAxis.setLabel(numberAxisLabel);
+
+        XYChart.Series<String, Number> series1 = new XYChart.Series();
+        for(int i = 0; i < listOfMethodTypes.getFromList().get(3).getList().getSize(); i++){
+            //System.out.println(listOfMethodTypes.getFromList().get(1).getList().getFromList().get(i).getIPAsString());
+            series1.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(3).getList().getFromList().get(i).getIPAsString(), i*10));
+        }
+        barChart.getData().addAll(series1);
     }
 
     public void setPieChartGraph(PieChart pieChart){
@@ -253,6 +261,7 @@ public class Controller {
 
         XYChart.Series<String, Number> series1 = new XYChart.Series();
         XYChart.Series<String, Number> series2 = new XYChart.Series();
+
 
         switch (listSwitcher) {
             case 0:
@@ -416,6 +425,8 @@ public class Controller {
             listOfTableViewObjectsAtTabGlobal.addToList(globalTabTableViewUpdate);
         }
         tabGlobalTabDatabaseTableViewDatabase.setItems(listOfTableViewObjectsAtTabGlobal.getFromList());
+        String listSize = String.valueOf(listOfTableViewObjectsAtTabGlobal.getSize());
+        tabGlobalTabDatabaseLabelResultsCount.setText(listSize);
     }
 
     /**
@@ -478,6 +489,8 @@ public class Controller {
             listOfTableViewObjectsAtTabGlobal.addToList(globalTabTableView);
         }
         tabGlobalTabDatabaseTableViewDatabase.setItems(listOfTableViewObjectsAtTabGlobal.getFromList());
+        String listSize = String.valueOf(listOfTableViewObjectsAtTabGlobal.getSize());
+        tabGlobalTabDatabaseLabelResultsCount.setText(listSize);
     }
 
     private void populateMethodTabTableView(String method) throws SQLException {

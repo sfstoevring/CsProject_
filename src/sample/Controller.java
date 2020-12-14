@@ -30,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.chart.*;
 import javafx.scene.effect.Light;
 import javafx.scene.paint.Color;
+import org.joda.time.DateTimeComparator;
 import org.w3c.dom.ls.LSOutput;
 
 import java.awt.*;
@@ -41,6 +42,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 public class Controller {
@@ -570,7 +576,15 @@ public class Controller {
         }
     }
 
-    public void tabHomeDatePickerGraphOfEntriesACTION(ActionEvent actionEvent) {
+    public void tabHomeDatePickerGraphOfEntriesACTION(ActionEvent actionEvent)   {
+        int counter = 0;
+
+        for (int i = 0; i < listOfEntries.getSize(); i++) {
+            if (listOfEntries.getFromList().get(i).getdDate().getDate() == tabHomeDatePickerGraphOfEntries.getValue().getDayOfMonth()
+                    && tabHomeDatePickerGraphOfEntries.getValue().getMonthValue() == 11){
+                counter++;
+            }
+        } tabHomeTextFieldEntriesToday.setText(""+counter+"");
     }
 
     public void tabHomeButtonGraphOfEntriesACTION(ActionEvent actionEvent) {
@@ -579,8 +593,8 @@ public class Controller {
     }
 
     public void tabHomeDatePickerGraphOfErrorsACTION(ActionEvent actionEvent) {
-    }
 
+    }
     public void tabHomeButtonGraphOfErrorsACTION(ActionEvent actionEvent) {
         goToOverviewTab();
     }

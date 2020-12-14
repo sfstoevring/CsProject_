@@ -28,7 +28,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <tabs>
       <Tab fx:id="tabHome" text="Home">
          <content>
@@ -564,7 +564,7 @@
          <content>
             <BorderPane prefHeight="790.0" prefWidth="1200.0">
                <center>
-                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+                  <TabPane prefHeight="200.0" prefWidth="200.0" fx:id="tabPaneMethod" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
                     <tabs>
                       <Tab fx:id="tabMethodTabDescription" text="Description">
                            <content>

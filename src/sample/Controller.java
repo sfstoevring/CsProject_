@@ -15,6 +15,8 @@ package sample;
 
 import com.gluonhq.charm.glisten.control.ToggleButtonGroup;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.BarChart;
@@ -26,9 +28,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.chart.*;
+import javafx.scene.effect.Light;
 import javafx.scene.paint.Color;
+import org.w3c.dom.ls.LSOutput;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -41,6 +47,7 @@ public class Controller {
     // GUI fields
     //
     public Tab tabHome;
+    public TabPane tabPane;
     public TableView tabHomeTableViewEntries;
     public TableColumn tabHomeTableViewEntriesColumnIP;
     public TableColumn tabHomeTableViewEntriesColumnTimeStamp;
@@ -143,7 +150,7 @@ public class Controller {
     public Label tabGlobalTabDatabaseLabelResultsCount;
 
     private QueryWriter queryWriter = new QueryWriter();
-
+    public boolean running = true;
     // List fields
     //
     private AnyList<Entry> listOfEntries = new AnyList<>("ListOfEntries");
@@ -155,18 +162,7 @@ public class Controller {
     private AnyList<TableViewObjects> listOfTableViewObjectsAtTabMethod = new AnyList<>("ListOfTableViewObjects@Tab_Method");
     private String[] listOfMethods = new String[8];
 
-    /* Jesper URL */
-    //private String url = "jdbc:sqlite:C:\\Users\\JesperBlom\\Documents\\GitHub\\CsProject_\\Database.db";
-
-    /* Simon URL */
-    private String url = "jdbc:sqlite:/Users/sfstoevring/Dropbox/RUC/5. Semester/Project/CsProject/Database.db";
-
-    /* Magnus URL */
-    //private String url = "jdbc:sqlite:/Users/magnus/Documents/CsProject_/Database.db";
-
-    /* Anders URL */
-    //private String url = "jdbc:sqlite:C:/Users/ander/Documents/Intelli J saves/CS_exa/CsProject_/Database.db";
-
+    private String url = "jdbc:sqlite:Database.db";
 
     public void initialize() throws ParseException, UnknownHostException, SQLException {
 
@@ -309,6 +305,30 @@ public class Controller {
         tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponse.setSelected(false);
         tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClient.setSelected(false);
         tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonFromService.setSelected(false);
+    }
+
+    /**
+     * Methods to navigate to tabs in the GUI
+     * index of tabs:
+     * Home = 0
+     * Overview = 1
+     * Global = 2
+     * Method = 3
+     */
+    public void goToHomeTab (){
+        tabPane.getSelectionModel().select(0);
+    }
+
+    public void goToOverviewTab (){
+        tabPane.getSelectionModel().select(1);
+    }
+
+    public void goToGlobalTab (){
+        tabPane.getSelectionModel().select(2);
+    }
+
+    public void goToMethodTab (){
+        tabPane.getSelectionModel().select(3);
     }
 
     /**
@@ -554,12 +574,15 @@ public class Controller {
     }
 
     public void tabHomeButtonGraphOfEntriesACTION(ActionEvent actionEvent) {
+       goToOverviewTab();
+
     }
 
     public void tabHomeDatePickerGraphOfErrorsACTION(ActionEvent actionEvent) {
     }
 
     public void tabHomeButtonGraphOfErrorsACTION(ActionEvent actionEvent) {
+        goToOverviewTab();
     }
 
     public void tabHomeButtonKillServerACTION(ActionEvent actionEvent) {
@@ -663,4 +686,5 @@ public class Controller {
 
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethodACTION(ActionEvent actionEvent) {
     }
-}
+
+    }

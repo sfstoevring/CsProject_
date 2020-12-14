@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Entry {
@@ -19,6 +20,7 @@ public class Entry {
     private int port;
     private int ID;
     private String IPAsString;
+    private String sDate;
 
     public Entry(){
     }
@@ -34,6 +36,7 @@ public class Entry {
         this.port = port;
         this.ID = ID;
         this.IPAsString = IP;
+        this.sDate = date;
     }
 
     public InetAddress getInetIP() {
@@ -58,6 +61,14 @@ public class Entry {
 
     public void setdDate(String date) throws ParseException {
         this.dDate = formatDate(date);
+    }
+
+    public String getsDate() {
+        return sDate;
+    }
+
+    public void setsDate(String sDate) {
+        this.sDate = sDate;
     }
 
     public Date formatDate(String date) throws ParseException {

@@ -35,6 +35,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.text.ParseException;
+import java.util.Random;
 
 public class Controller {
     // GUI fields
@@ -179,9 +180,13 @@ public class Controller {
         populateBubbles();
         populateHomeTabTableView();
         populateGlobalTabTableView();
-        //populateMethodTabTableView();
+        //populateMethodTabTableView(); //Skal bruge en String for at køre
         populateMethodTabCombobox();
 
+        Random random = new Random();
+
+        int random_x = random.nextInt(500);
+        int random_y = random.nextInt(500);
 
         for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
             System.out.println(listOfMethodTypes.getFromList().get(i).getListName() + " size: " + listOfMethodTypes.getFromList().get(i).getList().getSize());
@@ -193,8 +198,10 @@ public class Controller {
         GraphicsContext bubbles = tabOverviewCanvas.getGraphicsContext2D();
         bubbles.clearRect(0, 0, tabOverviewCanvas.getWidth(), tabOverviewCanvas.getHeight());
         for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
+            double random_x_test = Math.random() * (tabOverviewCanvas.getWidth() - tabOverviewCanvas.getWidth()/2 + 1) + tabOverviewCanvas.getWidth()/2;
+            double random_y_test = Math.random() * (tabOverviewCanvas.getHeight() - tabOverviewCanvas.getHeight()/2 + 1) + tabOverviewCanvas.getHeight()/2;
             bubbles.setFill(Color.rgb(200, 200, 200, 0.8));
-            bubbles.fillOval(tabOverviewCanvas.getWidth() / 2, tabOverviewCanvas.getHeight() / 2, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1);
+            bubbles.fillOval( random_x_test, random_y_test, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1, listOfMethodTypes.getFromList().get(i).getList().getSize() * 0.1);
         }
 
 
@@ -226,7 +233,6 @@ public class Controller {
                 }
                 break;
         }
-
         barChart.getData().addAll(series1);
 
     }
@@ -246,11 +252,27 @@ public class Controller {
 
     public void setPieChartGraph(PieChart pieChart){
 
-        PieChart.Data slice1 = new PieChart.Data("string", 1);
-        PieChart.Data slice2 = new PieChart.Data("string", 1);
-        PieChart.Data slice3 = new PieChart.Data("string", 8);
+        int chartSliceGET = 0;
+        int chartSlicePOST = 0;
 
-        pieChart.getData().addAll(slice1, slice2, slice3);
+        for (int i = 0; i < listOfMethodTypes.getFromList().get(3).getList().getSize(); i++) {
+            if (listOfMethodTypes.getFromList().get(3).getList().getFromList().get(i).getRequest().toLowerCase().contains("login")) {
+                chartSliceGET++;
+                System.out.println(chartSliceGET);
+            }
+        }
+
+        for (int i = 0; i < listOfMethodTypes.getFromList().get(6).getList().getSize(); i++) {
+            if (listOfMethodTypes.getFromList().get(6).getList().getFromList().get(i).getRequest().toLowerCase().contains("login")) {
+                chartSlicePOST++;
+                System.out.println(chartSlicePOST);
+            }
+        }
+
+        PieChart.Data slice1 = new PieChart.Data("GET", chartSliceGET);
+        PieChart.Data slice2 = new PieChart.Data("POST", chartSlicePOST);
+
+        pieChart.getData().addAll(slice1, slice2);
 
     }
 
@@ -262,21 +284,31 @@ public class Controller {
         XYChart.Series<String, Number> series1 = new XYChart.Series();
         XYChart.Series<String, Number> series2 = new XYChart.Series();
 
-
         switch (listSwitcher) {
             case 0:
-                for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
-                    System.out.println(i);
-                    series1.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(i).getName(), listOfMethodTypes.getFromList().get(i).getList().getSize()));
-                    series2.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(i).getName(), listOfMethodTypes.getFromList().get(i).getList().getSize()+100));
-
+                for (int i = 0; i < listOfEntries.getSize(); i++) {
+                    series1.getData().addAll(new XYChart.Data(listOfEntries.getFromList().get(i).getsDate(), 10));
+                    //series2.getData().addAll(new XYChart.Data(listOfMethodTypes.getFromList().get(i).getName(), listOfMethodTypes.getFromList().get(i).getList().getSize()+100));
                 }
+
                 break;
         }
 
-
         lineChart.getData().addAll(series1, series2);
 
+    }
+
+    public void resetToggleButtonAndTextField(){
+        tabGlobalTabDatabaseTextFieldSearchBar.setText("");
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonID.setSelected(false);
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIP.setSelected(false);
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonTimeStamp.setSelected(false);
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonPort.setSelected(false);
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethod.setSelected(false);
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonRequest.setSelected(false);
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponse.setSelected(false);
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClient.setSelected(false);
+        tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonFromService.setSelected(false);
     }
 
     /**
@@ -325,6 +357,7 @@ public class Controller {
             entry.setID(resultSet1.getInt("ID"));
             entry.setInetIP(resultSet1.getString("IP"));
             entry.setdDate(resultSet1.getString("TIME"));
+            entry.setsDate(resultSet1.getString("TIME"));
             entry.setMethod(resultSet1.getString("METHOD"));
             entry.setRequest(resultSet1.getString("REQUEST"));
             entry.setResponse(resultSet1.getInt("RESPONSE"));
@@ -594,6 +627,7 @@ public class Controller {
 
     public void tabGlobalTabDatabaseButtonResetACTION(ActionEvent actionEvent) throws SQLException {
         populateGlobalTabTableView();
+        resetToggleButtonAndTextField();
     }
 
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIDACTION(ActionEvent actionEvent) {

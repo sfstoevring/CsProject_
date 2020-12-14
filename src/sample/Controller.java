@@ -30,7 +30,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.chart.*;
 import javafx.scene.effect.Light;
 import javafx.scene.paint.Color;
-import org.joda.time.DateTimeComparator;
 import org.w3c.dom.ls.LSOutput;
 
 import java.awt.*;

@@ -22,6 +22,9 @@ public class Entry {
     private String IPAsString;
     private String sDate;
 
+    private Method methodType; //opfind måde at indsætte methodType her
+    private String firstPartOfRequest;
+
     public Entry(){
     }
 
@@ -139,6 +142,22 @@ public class Entry {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public Method getMethodType() {
+        return methodType;
+    }
+
+    public void setMethodType(Method methodType) {
+        this.methodType = methodType;
+    }
+
+    public String getFirstPartOfRequest() {
+        return firstPartOfRequest;
+    }
+
+    public void setFirstPartOfRequest(String firstPartOfRequest) {
+        this.firstPartOfRequest = firstPartOfRequest;
     }
 
     @Override

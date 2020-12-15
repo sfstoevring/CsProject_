@@ -1,19 +1,25 @@
 package sample;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 public class Bubble {
     private String name;
     private String bubbleType;
     private int size;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private String color;
     private int ID;
     private Method methodType;
 
-    public Bubble(String name, int ID, String bubbleType) {
+
+    public Bubble(String name, int size, int ID, Method methodType) {
         this.name = name;
+        this.size = size;
         this.ID = ID;
-        this.bubbleType = bubbleType;
+        this.methodType = methodType;
     }
 
     public String getName() {
@@ -56,19 +62,19 @@ public class Bubble {
         this.size = size;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -78,6 +84,19 @@ public class Bubble {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void drawBubble(Canvas canvas, double x, double y){
+        this.setX(x);
+        this.setY(y);
+        GraphicsContext bubble = canvas.getGraphicsContext2D();
+        bubble.setFill(Color.RED);
+        if (10<=size && size<=150) {
+            bubble.fillOval(x, y, size, size);
+        } else if (size>500) {
+            size = 200;
+            bubble.fillOval(x, y, size, size);
+        }
     }
 
 

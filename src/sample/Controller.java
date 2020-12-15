@@ -14,7 +14,6 @@
 package sample;
 
 import com.gluonhq.charm.glisten.control.ToggleButtonGroup;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import javafx.event.ActionEvent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -163,16 +162,13 @@ public class Controller {
 
 
     public void initialize() throws ParseException, UnknownHostException, SQLException {
-
-
         setPropertyValueFactories();
         createListOfMethods();
         createMethodsAsObjects();
         createEntriesAsObjectsFromDatabase();
         createErrorsAsObjectsFromDatabase();
         populateMethodObjects();
-        createBubbles();
-        populateBubbles();
+
         populateHomeTabTableView();
         populateGlobalTabTableView();
         populateMethodTabCombobox();
@@ -180,12 +176,10 @@ public class Controller {
         //printContentOfExtractionList();
         createRequests();
         populateRequests();
-        //printContentOfRequestArrayLists();
+        createBubbles();
+        populateCanvas();
+        // printContentOfRequestArrayLists();
 
-        Random random = new Random();
-
-        int random_x = random.nextInt(500);
-        int random_y = random.nextInt(500);
 
         for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
             System.out.println(listOfMethodTypes.getFromList().get(i).getListName() + " size: " + listOfMethodTypes.getFromList().get(i).getListOfEntries().getSize());
@@ -194,14 +188,7 @@ public class Controller {
         tabHomeTextFieldEntriesToday.setText(new String(listOfEntries.getSize() + ""));
         tabHomeTextFieldErrorsToday.setText(new String(listOfErrors.getSize() + ""));
 
-        GraphicsContext bubbles = tabOverviewCanvas.getGraphicsContext2D();
-        bubbles.clearRect(0, 0, tabOverviewCanvas.getWidth(), tabOverviewCanvas.getHeight());
-        for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
-            double random_x_test = Math.random() * (tabOverviewCanvas.getWidth() - tabOverviewCanvas.getWidth()/2 + 1) + tabOverviewCanvas.getWidth()/2;
-            double random_y_test = Math.random() * (tabOverviewCanvas.getHeight() - tabOverviewCanvas.getHeight()/2 + 1) + tabOverviewCanvas.getHeight()/2;
-            bubbles.setFill(Color.rgb(200, 200, 200, 0.8));
-            bubbles.fillOval( random_x_test, random_y_test, listOfMethodTypes.getFromList().get(i).getListOfEntries().getSize() * 0.1, listOfMethodTypes.getFromList().get(i).getListOfEntries().getSize() * 0.1);
-        }
+
 
 
         //graph
@@ -217,6 +204,8 @@ public class Controller {
     //* Methods *//
 
     private void createRegexRequestStrings() {
+        System.out.println("----------------------------------------");
+        System.out.println("Creating RegEx Strings...");
         int c = 0;
         String regex = new String();
         for (int i = 0; i < listOfEntries.getSize(); i++) {
@@ -250,7 +239,6 @@ public class Controller {
                 deleteDuplicates(extractionList);
             }
         }
-        System.out.println("Weird boiz$: " + c);
     }
 
     private void populateRequests() {
@@ -260,26 +248,19 @@ public class Controller {
             Entry tempEntry = listOfEntries.getFromList().get(i);
             for (int j = 0; j < listOfMethodTypes.getSize(); j++) {
                 Method tempMethod = listOfMethodTypes.getFromList().get(j);
-                System.out.println("TempMethod: " + tempMethod.getName() + " \tEntry #" + i + " \tMethod: " + tempEntry.getMethodType().getName() + " \tFirstPartOfRequest: " +tempEntry.getFirstPartOfRequest() + " \tRequest: " + tempEntry.getRequest());
-                if (tempEntry.getMethodType().getName().equals(tempMethod.getName())){
-                    System.out.println("_________hallelujah__________");
-                }
                 for (int k = 0; k < tempMethod.getRequestArrayList().getSize(); k++) {
                     Request tempRequest = tempMethod.getRequestFromRequestArrayList(k);
-                    System.out.println("TempMethod: " + tempMethod.getName() + " \tTempReqest: " + tempRequest.getFirstPartOfRequest());
                     if (tempEntry.getMethodType().getName().equals(tempMethod.getName()) && tempEntry.getFirstPartOfRequest().equals(tempRequest.getFirstPartOfRequest())){
                         tempRequest.addToListBasedOnFirstPartOfReqForAnObject(tempEntry);
-                        System.out.println("Saved entry in a request");
                     }
                 }
             }
         }
-        System.out.println("");
     }
 
     public void printContentOfRequestArrayLists() {
         System.out.println("----------------------------------------");
-        System.out.println("Now printing content of requestArrayLists for all RequestTypes");
+        System.out.println("Printing content of requestArrayLists for all RequestTypes..");
         for (int i = 0; i < listOfMethodTypes.getSize(); i++){
             Method tempMethod = listOfMethodTypes.getFromList().get(i);
             System.out.println("RequestType " + tempMethod.getName() + " contains:");
@@ -311,28 +292,19 @@ public class Controller {
         System.out.println("Creating Requests...");
         for (int i = 0; i < extractionList.size(); i++){
             String tempString = extractionList.get(i);
-            System.out.println("TempString: " + tempString);
             for (int j = 0; j < listOfMethodTypes.getSize(); j++) {
                 Method tempMethodType = listOfMethodTypes.getFromList().get(j);
-                System.out.println("\tTempRequestType: " + tempMethodType.getName());
+                //System.out.println("\tTempRequestType: " + tempMethodType.getName());
                 for (int k = 0; k < tempMethodType.getListOfEntries().getSize(); k++) {
                     AnyList<Entry> tempArrayListOfEntries = tempMethodType.getListOfEntries();
                     Entry tempEntry = tempArrayListOfEntries.getFromList().get(k);
-                    System.out.println("\t\tTempEntry: " + tempEntry.getRequest());
-                    if(tempEntry.getFirstPartOfRequest() == null || tempString == null){
-                        System.out.println("null Entry: " + tempEntry.getFirstPartOfRequest());
-                        System.out.println("null tempstring: " + tempString);
-                    } else if (tempEntry.getFirstPartOfRequest().equals(tempString)){
-                        System.out.println("\t\t\t---!!!TempEntry contains tempString!!!---");
+                    if (tempEntry.getFirstPartOfRequest().equals(tempString)){
                         Request request = new Request(tempMethodType, tempEntry.getFirstPartOfRequest());
                         tempMethodType.addRequestToRequestArrayList(request);
-                        System.out.println("\t\t\t\tAdded request: " + request.getFirstPartOfRequest() + " to: " + tempMethodType.getName());
                         break;
                     }
                 }
             }
-            System.out.println("");
-
         }
     }
 
@@ -371,6 +343,8 @@ public class Controller {
 
     public void setBarChartGraph(BarChart barChart, CategoryAxis categoryAxis, String categoryAxisLabel, NumberAxis numberAxis, String numberAxisLabel, int listSwitcher) {
 
+        System.out.println("----------------------------------------");
+        System.out.println("Setting BarChart...");
         categoryAxis.setLabel(categoryAxisLabel);
         numberAxis.setLabel(numberAxisLabel);
 
@@ -406,6 +380,8 @@ public class Controller {
     }
 
     public void setPieChartGraph(PieChart pieChart){
+        System.out.println("----------------------------------------");
+        System.out.println("Setting PieChart...");
 
         int chartSliceGET = 0;
         int chartSlicePOST = 0;
@@ -494,6 +470,8 @@ public class Controller {
      * Prepares the rows and columns in GUI
      */
     public void setPropertyValueFactories() {
+        System.out.println("----------------------------------------");
+        System.out.println("Setting Property Value Factories...");
         //TabHome
         tabHomeTableViewEntriesColumnTimeStamp.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("TIME"));
         tabHomeTableViewEntriesColumnIP.setCellValueFactory(new PropertyValueFactory<TableViewObjects, String>("IP"));
@@ -530,6 +508,8 @@ public class Controller {
      * @throws UnknownHostException
      */
     public void createEntriesAsObjectsFromDatabase() throws SQLException, ParseException, UnknownHostException {
+        System.out.println("----------------------------------------");
+        System.out.println("Creating Entry objects...");
         ResultSet resultSet1 = queryWriter.initResultSetToObjects(url, "DATA");
         while (resultSet1.next()) {
             Entry entry = new Entry();
@@ -557,6 +537,8 @@ public class Controller {
      * @throws SQLException
      */
     public void createErrorsAsObjectsFromDatabase() throws SQLException {
+        System.out.println("----------------------------------------");
+        System.out.println("Creating Error objects...");
         ResultSet resultSet = queryWriter.initResultSetToObjects(url, "ERROR");
         while (resultSet.next()) {
             Error error = new Error();
@@ -572,11 +554,13 @@ public class Controller {
      * @throws SQLException
      */
     public void createListOfMethods() throws SQLException {
+        System.out.println("----------------------------------------");
+        System.out.println("Creating ListOfMethods...");
         ResultSet rs = queryWriter.listOfMethods(url);
         int i = 0;
         while (rs.next()) {
             listOfMethods[i] = rs.getString("METHOD");
-            System.out.println("saved " + rs.getString("METHOD") + " in listOfMethods");
+            //System.out.println("saved " + rs.getString("METHOD") + " in listOfMethods");
             i++;
         }
     }
@@ -585,6 +569,8 @@ public class Controller {
      * Instantiates HTTP request methods as objects
      */
     public void createMethodsAsObjects() {
+        System.out.println("----------------------------------------");
+        System.out.println("Creating Method objects...");
         TypeASCII typeASCII = new TypeASCII();
         TypeCONNECT typeCONNECTION = new TypeCONNECT();
         TypeEMPTY typeEMPTY = new TypeEMPTY();
@@ -608,11 +594,12 @@ public class Controller {
      * Saves Entry objects in Method objects
      */
     private void populateMethodObjects() {
+        System.out.println("----------------------------------------");
+        System.out.println("Populating Method objects...");
         for (int i = 0; i < listOfEntries.getSize(); i++) { //gennemløber alle entries
             for (int j = 0; j < listOfMethodTypes.getSize(); j++) { //gennemløber alle metoder
                 if (listOfEntries.getFromList().get(i).getMethod().equalsIgnoreCase(listOfMethodTypes.getFromList().get(j).getName())) {
                     listOfMethodTypes.getFromList().get(j).addToList(listOfEntries.getFromList().get(i));
-                    System.out.println("Added an EntryObject to the list: " + listOfMethodTypes.getFromList().get(j).getListName());
                 } else {
                     continue;
                 }
@@ -646,26 +633,41 @@ public class Controller {
      * Creates bubbles. Used for visuals in GUI
      */
     public void createBubbles() {
-        for (int i = 0; i < listOfMethods.length; i++) {
-            String name = "bubble" + listOfMethods[i];
-            Bubble bubble = new Bubble(name, i, listOfMethods[i]);
-            listOfBubbles.addToList(bubble);
-            System.out.println("Added " + listOfBubbles.getFromList().get(i).getName() + " to listOfBubbles");
+        System.out.println("----------------------------------------");
+        System.out.println("Creating Bubbles...");
+        int idCounter = 0;
+        for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
+            Method tempMethod = listOfMethodTypes.getFromList().get(i);
+            for (int j = 0; j < tempMethod.getRequestArrayList().getSize(); j++) {
+                Request tempRequest = tempMethod.getRequestArrayList().getFromList().get(j);
+                int bubbleSize = tempRequest.getListBasedOnFirstPartOfReqForAnObject().size();
+                    String name = "bubble" + tempRequest.getFirstPartOfRequest();
+                    Bubble bubble = new Bubble(name, bubbleSize, idCounter, tempMethod);
+                    listOfBubbles.addToList(bubble);
+                    System.out.println("Added " + listOfBubbles.getFromList().get(i).getName() + " to listOfBubbles");
+                    idCounter++;
+            }
         }
     }
 
     /**
      * Saves Method objects in Bubble object
      */
-    public void populateBubbles() {
+    public void populateCanvas() {
+        System.out.println("----------------------------------------");
+        System.out.println("Populating canvas...");
+        double xx, yy;
+        xx = tabOverviewCanvas.getWidth()/2;
+        yy = tabOverviewCanvas.getHeight()/2;
+
+        System.out.println(listOfBubbles.getSize());
         for (int i = 0; i < listOfBubbles.getSize(); i++) {
-            for (int j = 0; j < listOfMethodTypes.getSize(); j++) {
-                if (listOfBubbles.getFromList().get(i).getBubbleType().equalsIgnoreCase(listOfMethodTypes.getFromList().get(j).getName())) {
-                    listOfBubbles.getFromList().get(i).setMethodType(listOfMethodTypes.getFromList().get(j));
-                    System.out.println("added methodType: " + listOfMethodTypes.getFromList().get(j).getName() + " to " + listOfBubbles.getFromList().get(i).getName());
-                }
-            }
+            Bubble bubble = listOfBubbles.getFromList().get(i);
+            bubble.drawBubble(tabOverviewCanvas, xx, yy);
         }
+        GraphicsContext bubble = tabOverviewCanvas.getGraphicsContext2D();
+        bubble.setFill(Color.RED);
+        bubble.fillOval(50,50,50,50);
     }
 
     private void populateHomeTabTableView() throws SQLException {

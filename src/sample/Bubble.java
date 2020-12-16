@@ -100,7 +100,7 @@ public class Bubble {
 
     public void drawBubble(Canvas canvas){
         GraphicsContext bubbleOnCanvas = canvas.getGraphicsContext2D();
-        bubbleOnCanvas.setFill(Color.rgb(250,100,199,0.8));
+        bubbleOnCanvas.setFill(Color.rgb(250,0,0,0.8));
         bubbleOnCanvas.fillOval(this.x, this.y, this.size, this.size);
         bubbleOnCanvas.setStroke(Color.BLACK);
         bubbleOnCanvas.strokeOval(this.x, this.y, this.size, this.size);
@@ -110,7 +110,7 @@ public class Bubble {
         this.setX(x);
         this.setY(y);
         GraphicsContext bubbleOnCanvas = canvas.getGraphicsContext2D();
-        bubbleOnCanvas.setFill(Color.rgb(250,100,199,0.8));
+        bubbleOnCanvas.setFill(Color.rgb(250,0,0,0.8));
         bubbleOnCanvas.fillOval(this.x, this.y, this.size, this.size);
         bubbleOnCanvas.setStroke(Color.BLACK);
         bubbleOnCanvas.strokeOval(this.x, this.y, this.size, this.size);

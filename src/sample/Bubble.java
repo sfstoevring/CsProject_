@@ -1,18 +1,22 @@
 package sample;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.awt.*;
 
 public class Bubble {
     private String name;
     private String bubbleType;
     private int size;
-    private double x;
-    private double y;
+    private int x;
+    private int y;
     private String color;
     private int ID;
     private Method methodType;
+    private boolean overlapping;
 
 
     public Bubble(String name, int size, int ID, Method methodType) {
@@ -62,19 +66,19 @@ public class Bubble {
         this.size = size;
     }
 
-    public double getX() {
+    public int getX() {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public double getY() {
+    public int getY() {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(int y) {
         this.y = y;
     }
 
@@ -86,17 +90,37 @@ public class Bubble {
         this.color = color;
     }
 
-    public void drawBubble(Canvas canvas, double x, double y){
+    public boolean isOverlapping() {
+        return overlapping;
+    }
+
+    public void setOverlapping(boolean overlapping) {
+        this.overlapping = overlapping;
+    }
+
+    public void drawBubble(Canvas canvas){
+        GraphicsContext bubbleOnCanvas = canvas.getGraphicsContext2D();
+        bubbleOnCanvas.setFill(Color.rgb(250,100,199,0.8));
+        bubbleOnCanvas.fillOval(this.x, this.y, this.size, this.size);
+        bubbleOnCanvas.setStroke(Color.BLACK);
+        bubbleOnCanvas.strokeOval(this.x, this.y, this.size, this.size);
+    }
+
+    public void drawBubble(Canvas canvas, int x, int y){
         this.setX(x);
         this.setY(y);
-        GraphicsContext bubble = canvas.getGraphicsContext2D();
-        bubble.setFill(Color.RED);
-        if (10<=size && size<=150) {
-            bubble.fillOval(x, y, size, size);
-        } else if (size>500) {
-            size = 200;
-            bubble.fillOval(x, y, size, size);
-        }
+        GraphicsContext bubbleOnCanvas = canvas.getGraphicsContext2D();
+        bubbleOnCanvas.setFill(Color.rgb(250,100,199,0.8));
+        bubbleOnCanvas.fillOval(this.x, this.y, this.size, this.size);
+        bubbleOnCanvas.setStroke(Color.BLACK);
+        bubbleOnCanvas.strokeOval(this.x, this.y, this.size, this.size);
+
+//        if (10<=size && size<=150) {
+//            bubbleOnCanvas.fillOval(x, y, size, size);
+//        } else if (size>500) {
+//            size = 200;
+//            bubbleOnCanvas.fillOval(x, y, size, size);
+//        }
     }
 
 

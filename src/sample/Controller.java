@@ -35,8 +35,10 @@ import java.net.UnknownHostException;
 import java.sql.*;
 import java.text.ParseException;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.DoubleStream;
 
 public class Controller {
     // GUI fields
@@ -641,10 +643,10 @@ public class Controller {
             for (int j = 0; j < tempMethod.getRequestArrayList().getSize(); j++) {
                 Request tempRequest = tempMethod.getRequestArrayList().getFromList().get(j);
                 int bubbleSize = tempRequest.getListBasedOnFirstPartOfReqForAnObject().size();
-                    String name = "bubble" + tempRequest.getFirstPartOfRequest();
+                    String name = "bubble-|" + tempRequest.getFirstPartOfRequest() + "|";
                     Bubble bubble = new Bubble(name, bubbleSize, idCounter, tempMethod);
                     listOfBubbles.addToList(bubble);
-                    System.out.println("Added " + listOfBubbles.getFromList().get(i).getName() + " to listOfBubbles");
+                    System.out.println("Added: " + listOfBubbles.getFromList().get(j).getName() + "\tWith size: " + bubble.getSize() + " \tto listOfBubbles");
                     idCounter++;
             }
         }
@@ -656,18 +658,103 @@ public class Controller {
     public void populateCanvas() {
         System.out.println("----------------------------------------");
         System.out.println("Populating canvas...");
-        double xx, yy;
-        xx = tabOverviewCanvas.getWidth()/2;
-        yy = tabOverviewCanvas.getHeight()/2;
+        int numberOfBubblesInListOfBubbles = listOfBubbles.getSize();
+        int numberOfWantedBubblesOnCanvas = 500;
+        int bubbleCounter = 0;
+        int protection = 100;
+        ArrayList<Bubble> bubblesToDisplayOnCanvas = new ArrayList<>();
+        ArrayList<Boolean> boolList = new ArrayList<>();
 
-        System.out.println(listOfBubbles.getSize());
-        for (int i = 0; i < listOfBubbles.getSize(); i++) {
-            Bubble bubble = listOfBubbles.getFromList().get(i);
-            bubble.drawBubble(tabOverviewCanvas, xx, yy);
+        while(bubbleCounter < numberOfWantedBubblesOnCanvas){
+            Random random = new Random();
+            int maxX = ((int) tabOverviewCanvas.getWidth());
+            int minX = maxX-maxX;
+            int maxY = ((int) tabOverviewCanvas.getHeight());
+            int minY = maxY-maxY;
+            int x = random.nextInt(((maxX - minX) + 1) + minX);
+            int y = random.nextInt(((maxY - minY) + 1) + minY);
+            Bubble tempBubble = listOfBubbles.getFromList().get(bubbleCounter);
+            tempBubble.setX(x - (tempBubble.getSize()));
+            tempBubble.setY(y - (tempBubble.getSize()));
+
+            if(bubblesToDisplayOnCanvas.isEmpty()){
+                bubblesToDisplayOnCanvas.add(tempBubble);
+                tempBubble.setOverlapping(false);
+                boolList.add(Boolean.TRUE);
+                //System.out.println("Added tempBubble #" + bubbleCounter + " to 'bubblesToDisplayOnCanvas'...\n");
+            }
+            checkIfBubbleOverlapsWithAnotherBubble(bubblesToDisplayOnCanvas, boolList, tempBubble, maxX, minX, maxY, minY);
+
+            bubbleCounter++;
         }
-        GraphicsContext bubble = tabOverviewCanvas.getGraphicsContext2D();
-        bubble.setFill(Color.RED);
-        bubble.fillOval(50,50,50,50);
+        System.out.println("Draw bubbles from bubblesToDisplayOnCanvas");
+        for (int i = 0; i < bubblesToDisplayOnCanvas.size(); i++) {
+            Bubble tempPrintBubble = bubblesToDisplayOnCanvas.get(i);
+            if(tempPrintBubble.getSize() > 3) {
+                tempPrintBubble.drawBubble(tabOverviewCanvas);
+            }
+        }
+
+//Inspiration til løsning af bubbles on canvas: https://codepen.io/grsmith/pen/zNGPoX
+    }
+
+    private void checkIfBubbleOverlapsWithAnotherBubble(ArrayList<Bubble> bubblesToDisplayOnCanvas, ArrayList<Boolean> boolList, Bubble tempBubble, int maxX, int minX, int maxY, int minY) {
+        ArrayList<Boolean> tempBoolList = new ArrayList<>();
+            for (Bubble tempBubbleFromList : bubblesToDisplayOnCanvas) {
+                if (calculateEuclideanDistance(tempBubble.getX(), tempBubble.getY(), tempBubble.getSize(), tempBubbleFromList.getX(), tempBubbleFromList.getY(), tempBubbleFromList.getSize())) {
+                    System.out.println("yes");
+                    tempBoolList.add(Boolean.TRUE);
+                    break;
+                } else if (!calculateEuclideanDistance(tempBubble.getX(), tempBubble.getY(), tempBubble.getSize(), tempBubbleFromList.getX(), tempBubbleFromList.getY(), tempBubbleFromList.getSize())) {
+                    Random tempRandom = new Random();
+                    System.out.println("\t\tno");
+                    tempBubble.setX(tempRandom.nextInt((maxX - minX) + 1) + minX - (tempBubble.getSize()));
+                    tempBubble.setY(tempRandom.nextInt((maxY - minY) + 1) + minY - (tempBubble.getSize()));
+                    tempBoolList.add(Boolean.FALSE);
+                    break;
+                }
+            }
+            if (tempBoolList.stream().allMatch(Predicate.isEqual(Boolean.TRUE))){
+                bubblesToDisplayOnCanvas.add(tempBubble);
+                boolList.add(Boolean.TRUE);
+            } else {
+                tempBoolList.clear();
+            }
+    }
+
+    private boolean checkIfEtEllerAndet(ArrayList<Bubble> bubblesToDisplayOnCanvas, ArrayList<Boolean> boolList, Bubble tempBubble, int maxX, int minX, int maxY, int minY) {
+        ArrayList<Boolean> tempBoolList = new ArrayList<>();
+        for (int i = 0; i < bubblesToDisplayOnCanvas.size(); i++) {
+            Bubble tempBubbleFromList = bubblesToDisplayOnCanvas.get(i);
+            if (calculateEuclideanDistance(tempBubble.getX(), tempBubble.getY(), tempBubble.getSize(), tempBubbleFromList.getX(), tempBubbleFromList.getY(), tempBubbleFromList.getSize())) {
+                System.out.println("yes");
+                tempBoolList.add(Boolean.TRUE);
+            } else {
+                tempBoolList.add(Boolean.FALSE);
+            }
+        }
+
+        if(tempBoolList.size() == bubblesToDisplayOnCanvas.size()){
+            System.out.println("BOBbubblesToDisplay size: " + bubblesToDisplayOnCanvas.size());
+            System.out.println("BOBtempBoolList size: " + tempBoolList.size());
+            return true;
+        }
+        else{
+            System.out.println("bubblesToDisplay size: " + bubblesToDisplayOnCanvas.size());
+            System.out.println("tempBoolList size: " + tempBoolList.size());
+            return false;
+        }
+
+    }
+
+    public boolean calculateEuclideanDistance(int X1, int Y1, int size1, int X2, int Y2, int size2){
+        double distance = Math.sqrt( Math.pow((X1 - X2), 2) + Math.pow((Y1 - Y2), 2));
+
+        if ((size1 + size2) < distance){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void populateHomeTabTableView() throws SQLException {

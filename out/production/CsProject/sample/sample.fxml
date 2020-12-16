@@ -221,7 +221,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Canvas fx:id="tabOverviewCanvas" height="499.0" width="1201.0" GridPane.rowIndex="1" />
+                        <Canvas fx:id="tabOverviewCanvas" height="490.0" width="1190.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                      </children>
                   </GridPane>
                </center>
@@ -263,7 +263,7 @@
                            <content>
                               <BorderPane prefHeight="520.0" prefWidth="1200.0">
                                  <center>
-                                    <ImageView fitHeight="96.0" fitWidth="200.0" BorderPane.alignment="CENTER">
+                                    <ImageView fitHeight="705.0" fitWidth="1190.0" BorderPane.alignment="CENTER">
                                        <image>
                                           <Image url="@Map.png" />
                                        </image>
@@ -564,7 +564,7 @@
          <content>
             <BorderPane prefHeight="790.0" prefWidth="1200.0">
                <center>
-                  <TabPane prefHeight="200.0" prefWidth="200.0" fx:id="tabPaneMethod" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+                  <TabPane fx:id="tabPaneMethod" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
                     <tabs>
                       <Tab fx:id="tabMethodTabDescription" text="Description">
                            <content>

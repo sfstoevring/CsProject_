@@ -16,25 +16,24 @@ package sample;
 import com.gluonhq.charm.glisten.control.ToggleButtonGroup;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.*;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.chart.*;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
-import java.util.Date;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -144,9 +143,9 @@ public class Controller {
     public CategoryAxis tabGlobalTabTopAttackerBarChartTopAttackerX;
     public NumberAxis tabGlobalTabTopAttackerBarChartTopAttackerY;
     public Label tabGlobalTabDatabaseLabelResultsCount;
+    public TextArea tabMethodTabDescriptionTextArea;
 
     private QueryWriter queryWriter = new QueryWriter();
-    public boolean running = true;
 
     // List fields
     //
@@ -168,59 +167,97 @@ public class Controller {
 
     private String url = "jdbc:sqlite:Database.db";
 
-    public void initialize() throws ParseException, UnknownHostException, SQLException {
+    public void initialize() throws ParseException, UnknownHostException, SQLException{
+
         setPropertyValueFactories();
         createListOfMethods();
         createMethodsAsObjects();
         createEntriesAsObjectsFromDatabase();
         createErrorsAsObjectsFromDatabase();
-        //printContentOfErrors();
         populateMethodObjects();
         populateHomeTabTableView();
         populateGlobalTabTableView();
         populateMethodTabCombobox();
         createRegexRequestStrings();
-        //printContentOfExtractionList();
         createRequests();
         populateRequests();
         createBubbles();
         populateCanvas();
-        // printContentOfRequestArrayLists();
         createListOfIPs(listOfEntries);
         removeDuplicates(listOfIPsWithoutDuplicates.getList(), listOfIPs.getList());
         populateIpObjects();
-
         createListOfDates(listOfEntries, listOfErrors);
         removeDuplicates(listOfDatesWithoutDuplicates.getList(), listOfDates.getList());
         createDateObjects();
         populateDateObjects();
 
-        printContentOfDateObjects();
+        //Print methods
+        //printContentOfDateObjects();
         //printContentOfIpObjectsHits();
-
-        //listOfIPsWithoutDuplicates.setList(removeDuplicates(listOfIPs.getList()));
-
+        // printContentOfRequestArrayLists();
+        //printContentOfExtractionList();
+        //printContentOfErrors();
         //printContentOfIPList(listOfIPsWithoutDuplicates);
         //printContentOfIPList(listOfIPs);
         //printInstancesOfMethodTypes();
 
-        //tabHomeTextFieldEntriesToday.setText(new String(listOfEntries.getSize() + ""));
-        //tabHomeTextFieldErrorsToday.setText(new String(listOfErrors.getSize() + ""));
-
-        //graph
+        //Set GUI stuff
         setBarChartGraph(tabOverviewBarChartThreats, tabOverviewBarChartThreatsX, " ", tabOverviewBarChartThreatsY, " ", 0);
         setPieChartGraph(tabGlobalTabLoginsPieChartLogins);
         setLineChartGraph(tabGlobalTabEntriesLineChartEntries, tabGlobalTabEntriesLineChartEntriesX, "Date", tabGlobalTabEntriesLineChartEntriesY, "Hits", 0);
         setLineChartGraph(tabGlobalTabErrorsLineChartErrors, tabGlobalTabErrorsLineChartErrorsX, "Date", tabGlobalTabErrorsLineChartErrorsY, "Hits", 1);
         setLineChartGraph(tabGlobalTabTrendsOverTimeLineChartTrendsOverTime, tabGlobalTabTrendsOverTimeLineChartTrendsOverTimeX, "Date", tabGlobalTabTrendsOverTimeLineChartTrendsOverTimeY, "Hits", 2);
-        setBarChartGraph(tabGlobalTabIPBarChartIP, tabGlobalTabIPBarChartIPX,"IP address", tabGlobalTabIPBarChartIPY, "Hits", 1);
-        setBarChartGraph(tabGlobalTabPortBarChartPort, tabGlobalTabPortBarChartPortX,"Port", tabGlobalTabPortBarChartPortY, "Hits", 2);
+        setBarChartGraph(tabGlobalTabIPBarChartIP, tabGlobalTabIPBarChartIPX, "IP address", tabGlobalTabIPBarChartIPY, "Hits", 1);
+        setBarChartGraph(tabGlobalTabPortBarChartPort, tabGlobalTabPortBarChartPortX, "Port", tabGlobalTabPortBarChartPortY, "Hits", 2);
+        tabOverviewCanvas.setOnMouseClicked(event -> {
+            try {
+                fromOverviewToMethod(event.getX(),event.getY());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
+        System.out.println("----------------------------------------");
+        System.out.println("Search history:");
+    }
+
+    private void setTextArea(javafx.scene.control.TextArea textArea, Tab tab) {
+        String comboBoxValue = tabMethodComboBoxVisualizeMethod.getSelectionModel().getSelectedItem().toString();
+        System.out.println(comboBoxValue);
+        if (comboBoxValue.equals("ASCII")){
+            textArea.setText("\"ASCII\"\n\nMeans that someone or something tried to send the server a command in an old format, hoping for some kind of reaction");
+        } else if (comboBoxValue.equals("CONNECT")) {
+            textArea.setText("\"CONNECT\"\n\nThis specification reserves the method name CONNECT for use with a proxy that can\n" +
+                    " dynamically switch to being a tunnel.");
+        } else if (comboBoxValue.equals("EMPTY")) {
+            textArea.setText("\"EMPTY\"\n\nMeans that the where was no request made on the web-service, about some action still\n" +
+                    " generated a entry in the access.log. It can also mean that there is no proper way of categorize what was done on the web-service");
+        } else if (comboBoxValue.equals("GET")) {
+            textArea.setText("\"GET\"\n\nMethods are one of the most common types of request methods on a web-service\n" +
+                    "This is used when someone or something is requesting information from a particular source.");
+        } else if (comboBoxValue.equals("HEAD")) {
+            textArea.setText("\"HEAD\"\n\nMethods are identical to \"GET\" methods, expect the server will not return a message body in the browser\n" +
+                    "It is used to get information about the service without changing the page alone");
+        } else if (comboBoxValue.equals("OPTIONS")) {
+            textArea.setText("\"OPTIONS\"\n\nMethods represent request about information on how to communicate with the service. \n" +
+                    "This method allows the client to determine the options and/or requirements associated with a resource,\n" +
+                    " or the capabilities of a server, without implying a resource action or initiating a resource retrieval");
+        } else if (comboBoxValue.equals("POST")) {
+            textArea.setText("\"POST\" And \"GET\"\n\nmethods are both HTTP request and \"POST\" is used when the web-service \n" +
+                    "is asked to input information from the supplying browser into the server's message system.");
+        } else if (comboBoxValue.equals("PROPFIND")) {
+            textArea.setText("\"PROPFIND\"\n\nMethods are used to retrieve properties of the resource mentioned by the URI, often of other web resources.");
+        } else {
+            textArea.setText("Sorry, something went terribly wrong");
+
+        }
+
 
     }
 
     private void printContentOfDateObjects() {
         int i = 0;
-        for (DateObject tempDateObject : listOfDateObjects.getList()){
+        for (DateObject tempDateObject : listOfDateObjects.getList()) {
             System.out.println("DateObject #" + i + " Date: " + tempDateObject.getDate());
             System.out.println("\tAmountOfEntries: " + tempDateObject.getAmountOfEntries());
             System.out.println("\tAmountOfErrors: " + tempDateObject.getAmountOfErrors());
@@ -236,19 +273,19 @@ public class Controller {
             for (int j = 0; j < listOfDateObjects.getSize(); j++) {
                 DateObject tempDateObject = listOfDateObjects.getList().get(j);
                 Date tempDateObjectDate = tempDateObject.getDate();
-                if (tempEntryDate.compareTo(tempDateObjectDate) == 0){
+                if (tempEntryDate.compareTo(tempDateObjectDate) == 0) {
                     tempDateObject.addAmountOfEntries();
                 }
 
             }
         }
-        for (int i = 0; i < listOfErrors.getSize(); i++){
+        for (int i = 0; i < listOfErrors.getSize(); i++) {
             Error tempError = listOfErrors.getList().get(i);
             Date tempErrorDate = tempError.getdDate();
             for (int j = 0; j < listOfDateObjects.getSize(); j++) {
                 DateObject tempDateObject = listOfDateObjects.getList().get(j);
                 Date tempDateObjectDate = tempDateObject.getDate();
-                if (tempErrorDate.compareTo(tempDateObjectDate) == 0){
+                if (tempErrorDate.compareTo(tempDateObjectDate) == 0) {
                     tempDateObject.addAmountOfErrors();
                 }
             }
@@ -260,7 +297,7 @@ public class Controller {
         System.out.println("Creating ListOfDates...");
         for (int i = 0; i < list1.getSize(); i++) {
             Date tempDate = list1.getList().get(i).getdDateWOT();
-                listOfDates.addToList(tempDate);
+            listOfDates.addToList(tempDate);
         }
         for (int i = 0; i < list2.getSize(); i++) {
             Date tempDate = list2.getList().get(i).getdDate();
@@ -291,12 +328,13 @@ public class Controller {
     private void printContentOfIpObjectsHits() {
         System.out.println("----------------------------------------");
         System.out.println("Printing amount of hits from IP Objects...");
-        for (IP ip : listOfIpObjects.getList()){
+        for (IP ip : listOfIpObjects.getList()) {
             System.out.println("IP: " + ip.getIpAsString() + "\tHits: " + ip.getHitsFromThisIp());
         }
     }
 
     private void populateIpObjects() throws UnknownHostException {
+        //Inspiration: https://stackoverflow.com/questions/44367203/how-to-count-duplicate-elements-in-arraylist/44367261
         System.out.println("----------------------------------------");
         System.out.println("Populating IP Objects...");
         for (int i = 0; i < listOfIPsWithoutDuplicates.getSize(); i++) {
@@ -306,8 +344,8 @@ public class Controller {
         }
 
         Map<String, Integer> map = new HashMap<>();
-        for(  String tempString  : listOfIPs.getList()) {
-            if(  map.containsKey(tempString)   ) {
+        for (String tempString : listOfIPs.getList()) {
+            if (map.containsKey(tempString)) {
                 map.put(tempString, map.get(tempString) + 1);
             } else {
                 map.put(tempString, 1);
@@ -315,17 +353,15 @@ public class Controller {
         }
 
         Set<Map.Entry<String, Integer>> ipSet = map.entrySet();
-        for(    Map.Entry<String, Integer> ipKeyHitsValue : ipSet     ) {
+        for (Map.Entry<String, Integer> ipKeyHitsValue : ipSet) {
             //System.out.printf(   "%s : %d %n "    , ipKeyHitsValue.getKey(),ipKeyHitsValue.getValue()  );
             for (int i = 0; i < listOfIpObjects.getSize(); i++) {
                 IP tempIpObject = listOfIpObjects.getList().get(i);
-                if (tempIpObject.getIpAsString().equals(ipKeyHitsValue.getKey())){
+                if (tempIpObject.getIpAsString().equals(ipKeyHitsValue.getKey())) {
                     tempIpObject.overwriteHitsFromThisIp(ipKeyHitsValue.getValue());
                 }
             }
         }
-
-        //Inspiration: https://stackoverflow.com/questions/44367203/how-to-count-duplicate-elements-in-arraylist/44367261
     }
 
     private void printInstancesOfMethodTypes() {
@@ -348,7 +384,7 @@ public class Controller {
     }
 
     private void createListOfIPs(AnyList<Entry> list) {
-        for (int i = 0; i < list.getSize(); i++){
+        for (int i = 0; i < list.getSize(); i++) {
             String tempString = list.getList().get(i).getIPAsString();
             listOfIPs.addToList(tempString);
         }
@@ -373,7 +409,7 @@ public class Controller {
         String regex = new String();
         for (int i = 0; i < listOfEntries.getSize(); i++) {
             Entry tempEntry = listOfEntries.getList().get(i);
-            if (tempEntry.getRequest() == null){
+            if (tempEntry.getRequest() == null) {
                 tempEntry.setRequest("-");
             }
             if (tempEntry.getRequest().startsWith(" ")) {
@@ -385,7 +421,7 @@ public class Controller {
                 regex = "(^/[^/]*/{1})"; //Virker på " / ... / "
             } else if (tempEntry.getRequest().startsWith("-")) {
                 regex = "(^-.*)";
-            } else{
+            } else {
                 regex = "(.*)";
                 System.out.println("...");
                 c++;
@@ -413,7 +449,7 @@ public class Controller {
                 Method tempMethod = listOfMethodTypes.getList().get(j);
                 for (int k = 0; k < tempMethod.getRequestArrayList().getSize(); k++) {
                     Request tempRequest = tempMethod.getRequestFromRequestArrayList(k);
-                    if (tempEntry.getMethodType().getName().equals(tempMethod.getName()) && tempEntry.getFirstPartOfRequest().equals(tempRequest.getFirstPartOfRequest())){
+                    if (tempEntry.getMethodType().getName().equals(tempMethod.getName()) && tempEntry.getFirstPartOfRequest().equals(tempRequest.getFirstPartOfRequest())) {
                         tempRequest.addToListBasedOnFirstPartOfReqForAnObject(tempEntry);
                     }
                 }
@@ -424,14 +460,14 @@ public class Controller {
     public void printContentOfRequestArrayLists() {
         System.out.println("----------------------------------------");
         System.out.println("Printing content of requestArrayLists for all RequestTypes..");
-        for (int i = 0; i < listOfMethodTypes.getSize(); i++){
+        for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
             Method tempMethod = listOfMethodTypes.getList().get(i);
             System.out.println("RequestType " + tempMethod.getName() + " contains:");
             AnyList<Request> tempArrayList = listOfMethodTypes.getList().get(i).getRequestArrayList();
-            for (int j = 0; j < tempArrayList.getSize(); j ++){
+            for (int j = 0; j < tempArrayList.getSize(); j++) {
                 Request tempRequest = tempArrayList.getList().get(j);
                 System.out.println("\tRequest object: " + tempRequest.getFirstPartOfRequest() + " \tis size: " + tempRequest.getListBasedOnFirstPartOfReqForAnObject().size());
-                for (int k = 0; k < tempRequest.getListBasedOnFirstPartOfReqForAnObject().size(); k++){
+                for (int k = 0; k < tempRequest.getListBasedOnFirstPartOfReqForAnObject().size(); k++) {
                     System.out.println("\t\t" + tempRequest.getFromListBasedOnFirstPartOfReqForAnObject(k).getRequest());
                 }
             }
@@ -440,7 +476,7 @@ public class Controller {
         System.out.println("");
     }
 
-    public void printContentOfExtractionList(){
+    public void printContentOfExtractionList() {
         System.out.println("----------------------------------------");
         System.out.println("Size of extractionList: " + extractionList.size());
         System.out.println("Content of extractionList:");
@@ -453,7 +489,7 @@ public class Controller {
     public void createRequests() {
         System.out.println("----------------------------------------");
         System.out.println("Creating Requests...");
-        for (int i = 0; i < extractionList.size(); i++){
+        for (int i = 0; i < extractionList.size(); i++) {
             String tempString = extractionList.get(i);
             for (int j = 0; j < listOfMethodTypes.getSize(); j++) {
                 Method tempMethodType = listOfMethodTypes.getList().get(j);
@@ -461,7 +497,7 @@ public class Controller {
                 for (int k = 0; k < tempMethodType.getListOfEntries().getSize(); k++) {
                     AnyList<Entry> tempArrayListOfEntries = tempMethodType.getListOfEntries();
                     Entry tempEntry = tempArrayListOfEntries.getList().get(k);
-                    if (tempEntry.getFirstPartOfRequest().equals(tempString)){
+                    if (tempEntry.getFirstPartOfRequest().equals(tempString)) {
                         Request request = new Request(tempMethodType, tempEntry.getFirstPartOfRequest());
                         tempMethodType.addRequestToRequestArrayList(request);
                         break;
@@ -474,30 +510,30 @@ public class Controller {
     public Method assignMethodTypeToEntry(String method, AnyList<Method> listOfMethodTypes) {
         Method methodReturn = null;
 
-        if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(0).getName())){
+        if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(0).getName())) {
             methodReturn = new TypeASCII();
-        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(1).getName())){
+        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(1).getName())) {
             methodReturn = new TypeCONNECT();
-        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(2).getName())){
+        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(2).getName())) {
             methodReturn = new TypeEMPTY();
-        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(3).getName())){
+        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(3).getName())) {
             methodReturn = new TypeGET();
-        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(4).getName())){
+        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(4).getName())) {
             methodReturn = new TypeHEAD();
-        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(5).getName())){
+        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(5).getName())) {
             methodReturn = new TypeOPTIONS();
-        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(6).getName())){
+        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(6).getName())) {
             methodReturn = new TypePOST();
-        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(7).getName())){
+        } else if (method.equalsIgnoreCase(listOfMethodTypes.getList().get(7).getName())) {
             methodReturn = new TypePROPFIND();
         }
         return methodReturn;
     }
 
-    public static void deleteDuplicates(ArrayList<String> list){
-        for(int i = 0; i < list.size(); i++){
-            for(int j = i+1; j < list.size(); j++){
-                if(list.get(i).equals(list.get(j))){
+    public static void deleteDuplicates(ArrayList<String> list) {
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = i + 1; j < list.size(); j++) {
+                if (list.get(i).equals(list.get(j))) {
                     list.remove(j);
                 }
             }
@@ -514,7 +550,6 @@ public class Controller {
         XYChart.Series<String, Number> series1 = new XYChart.Series();
 
 
-
         switch (listSwitcher) {
             case 0: //Setting Barchart at tabOverview
                 for (int i = 0; i < listOfMethodTypes.getSize(); i++) {
@@ -522,25 +557,25 @@ public class Controller {
                 }
                 break;
             case 1: //Setting BarChart at tabGlobalTabIP
-                for(int i = 0; i < listOfIpObjects.getSize(); i++){
+                for (int i = 0; i < listOfIpObjects.getSize(); i++) {
                     IP tempIpObject = listOfIpObjects.getList().get(i);
-                    if(tempIpObject.getHitsFromThisIp() > 10) {
+                    if (tempIpObject.getHitsFromThisIp() > 10) {
                         series1.getData().addAll(new XYChart.Data(tempIpObject.getIpAsString(), tempIpObject.getHitsFromThisIp()));
                     }
                 }
                 break;
             case 2: //Setting BarChart at tabGlobalTabPort
-                series1.getData().add(new XYChart.Data("SSH : 22", listOfEntries.getSize()-2560));
+                series1.getData().add(new XYChart.Data("SSH : 22", listOfEntries.getSize() - 2560));
                 series1.getData().add(new XYChart.Data("HTTP : 80", listOfEntries.getSize()));
-                series1.getData().add(new XYChart.Data("HTTPS : 443", listOfEntries.getSize()+1300));
-                series1.getData().add(new XYChart.Data("SMTP : 587", listOfEntries.getSize()-2988));
-                series1.getData().add(new XYChart.Data("TOMCAT : 8443", listOfEntries.getSize()-3204));
+                series1.getData().add(new XYChart.Data("HTTPS : 443", listOfEntries.getSize() + 1300));
+                series1.getData().add(new XYChart.Data("SMTP : 587", listOfEntries.getSize() - 2988));
+                series1.getData().add(new XYChart.Data("TOMCAT : 8443", listOfEntries.getSize() - 3204));
                 break;
         }
-            barChart.getData().addAll(series1);
+        barChart.getData().addAll(series1);
     }
 
-    public void setPieChartGraph(PieChart pieChart){
+    public void setPieChartGraph(PieChart pieChart) {
         System.out.println("----------------------------------------");
         System.out.println("Setting PieChart...");
 
@@ -568,7 +603,7 @@ public class Controller {
 
     }
 
-    public void setLineChartGraph(LineChart lineChart, CategoryAxis categoryAxis, String categoryAxisLabel, NumberAxis numberAxis, String numberAxisLabel, int listSwitcher){
+    public void setLineChartGraph(LineChart lineChart, CategoryAxis categoryAxis, String categoryAxisLabel, NumberAxis numberAxis, String numberAxisLabel, int listSwitcher) {
 
         categoryAxis.setLabel(categoryAxisLabel);
         numberAxis.setLabel(numberAxisLabel);
@@ -601,7 +636,7 @@ public class Controller {
 
     }
 
-    public void resetToggleButtonAndTextField(){
+    public void resetToggleButtonAndTextField() {
         tabGlobalTabDatabaseTextFieldSearchBar.setText("");
         tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonID.setSelected(false);
         tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIP.setSelected(false);
@@ -622,19 +657,19 @@ public class Controller {
      * Global = 2
      * Method = 3
      */
-    public void goToHomeTab (){
+    public void goToHomeTab() {
         tabPane.getSelectionModel().select(0);
     }
 
-    public void goToOverviewTab (){
+    public void goToOverviewTab() {
         tabPane.getSelectionModel().select(1);
     }
 
-    public void goToGlobalTab (){
+    public void goToGlobalTab() {
         tabPane.getSelectionModel().select(2);
     }
 
-    public void goToMethodTab (){
+    public void goToMethodTab() {
         tabPane.getSelectionModel().select(3);
     }
 
@@ -697,7 +732,7 @@ public class Controller {
             entry.setClient(resultSet1.getString("FROM_CLIENT"));
             entry.setPort(resultSet1.getInt("PORT"));
             entry.setsDateWOT(resultSet1.getString("DATE_WITHOUT_TIME"));
-            entry.setMethodType(assignMethodTypeToEntry(entry.getMethod(),listOfMethodTypes));
+            entry.setMethodType(assignMethodTypeToEntry(entry.getMethod(), listOfMethodTypes));
             listOfEntries.addToList(entry);
         }
     }
@@ -783,7 +818,7 @@ public class Controller {
 
     private void updateGlobalTabTableView(String toggleButton, String textFieldInput) throws SQLException {
         listOfTableViewObjectsAtTabGlobal.clearList();
-        ResultSet rsGlobalTabTableViewUpdate = queryWriter.resultSetForGlobalTabTableViewUpdating(url,toggleButton,textFieldInput);
+        ResultSet rsGlobalTabTableViewUpdate = queryWriter.resultSetForGlobalTabTableViewUpdating(url, toggleButton, textFieldInput);
         while (rsGlobalTabTableViewUpdate.next()) {
             TableViewObjects globalTabTableViewUpdate = new TableViewObjects();
             globalTabTableViewUpdate.setID(rsGlobalTabTableViewUpdate.getInt("ID"));
@@ -815,11 +850,11 @@ public class Controller {
             for (int j = 0; j < tempMethod.getRequestArrayList().getSize(); j++) {
                 Request tempRequest = tempMethod.getRequestArrayList().getList().get(j);
                 int bubbleSize = tempRequest.getListBasedOnFirstPartOfReqForAnObject().size();
-                    String name = "bubble-|" + tempRequest.getFirstPartOfRequest() + "|";
-                    Bubble bubble = new Bubble(name, bubbleSize, idCounter, tempMethod);
-                    listOfBubbles.addToList(bubble);
-                    //System.out.println("Added: " + listOfBubbles.getFromList().get(j).getName() + "\tWith size: " + bubble.getSize() + " \tto listOfBubbles");
-                    idCounter++;
+                String name = "bubble-|" + tempRequest.getFirstPartOfRequest() + "|";
+                Bubble bubble = new Bubble(name, bubbleSize, idCounter, tempMethod);
+                listOfBubbles.addToList(bubble);
+                //System.out.println("Added: " + listOfBubbles.getFromList().get(j).getName() + "\tWith size: " + bubble.getSize() + " \tto listOfBubbles");
+                idCounter++;
             }
         }
     }
@@ -837,19 +872,19 @@ public class Controller {
         ArrayList<Bubble> bubblesToDisplayOnCanvas = new ArrayList<>();
         ArrayList<Boolean> boolList = new ArrayList<>();
 
-        while(bubbleCounter < numberOfWantedBubblesOnCanvas){
+        while (bubbleCounter < numberOfWantedBubblesOnCanvas) {
             Random random = new Random();
             int maxX = ((int) tabOverviewCanvas.getWidth());
-            int minX = maxX-maxX;
+            int minX = maxX - maxX;
             int maxY = ((int) tabOverviewCanvas.getHeight());
-            int minY = maxY-maxY;
+            int minY = maxY - maxY;
             int x = random.nextInt(((maxX - minX) + 1) + minX);
             int y = random.nextInt(((maxY - minY) + 1) + minY);
             Bubble tempBubble = listOfBubbles.getList().get(bubbleCounter);
             tempBubble.setX(x - (tempBubble.getSize()));
             tempBubble.setY(y - (tempBubble.getSize()));
 
-            if(bubblesToDisplayOnCanvas.isEmpty()){
+            if (bubblesToDisplayOnCanvas.isEmpty()) {
                 bubblesToDisplayOnCanvas.add(tempBubble);
                 tempBubble.setOverlapping(false);
                 boolList.add(Boolean.TRUE);
@@ -862,7 +897,7 @@ public class Controller {
         System.out.println("\tDrawing bubbles from bubblesToDisplayOnCanvas...");
         for (int i = 0; i < bubblesToDisplayOnCanvas.size(); i++) {
             Bubble tempPrintBubble = bubblesToDisplayOnCanvas.get(i);
-            if(tempPrintBubble.getSize() > 3 && tempPrintBubble.getSize() < 500) {
+            if (tempPrintBubble.getSize() > 3 && tempPrintBubble.getSize() < 500) {
                 tempPrintBubble.drawBubble(tabOverviewCanvas);
             }
         }
@@ -872,30 +907,30 @@ public class Controller {
 
     private void checkIfBubbleOverlapsWithAnotherBubble(ArrayList<Bubble> bubblesToDisplayOnCanvas, ArrayList<Boolean> boolList, Bubble tempBubble, int maxX, int minX, int maxY, int minY) {
         ArrayList<Boolean> tempBoolList = new ArrayList<>();
-            for (Bubble tempBubbleFromList : bubblesToDisplayOnCanvas) {
-                if (calculateEuclideanDistance(tempBubble.getX(), tempBubble.getY(), tempBubble.getSize(), tempBubbleFromList.getX(), tempBubbleFromList.getY(), tempBubbleFromList.getSize())) {
-                    tempBoolList.add(Boolean.TRUE);
-                    break;
-                } else if (!calculateEuclideanDistance(tempBubble.getX(), tempBubble.getY(), tempBubble.getSize(), tempBubbleFromList.getX(), tempBubbleFromList.getY(), tempBubbleFromList.getSize())) {
-                    Random tempRandom = new Random();
-                    tempBubble.setX(tempRandom.nextInt((maxX - minX) + 1) + minX - (tempBubble.getSize()));
-                    tempBubble.setY(tempRandom.nextInt((maxY - minY) + 1) + minY - (tempBubble.getSize()));
-                    tempBoolList.add(Boolean.FALSE);
-                    break;
-                }
+        for (Bubble tempBubbleFromList : bubblesToDisplayOnCanvas) {
+            if (calculateEuclideanDistance(tempBubble.getX(), tempBubble.getY(), tempBubble.getSize(), tempBubbleFromList.getX(), tempBubbleFromList.getY(), tempBubbleFromList.getSize())) {
+                tempBoolList.add(Boolean.TRUE);
+                break;
+            } else if (!calculateEuclideanDistance(tempBubble.getX(), tempBubble.getY(), tempBubble.getSize(), tempBubbleFromList.getX(), tempBubbleFromList.getY(), tempBubbleFromList.getSize())) {
+                Random tempRandom = new Random();
+                tempBubble.setX(tempRandom.nextInt((maxX - minX) + 1) + minX - (tempBubble.getSize()));
+                tempBubble.setY(tempRandom.nextInt((maxY - minY) + 1) + minY - (tempBubble.getSize()));
+                tempBoolList.add(Boolean.FALSE);
+                break;
             }
-            if (tempBoolList.stream().allMatch(Predicate.isEqual(Boolean.TRUE))){
-                bubblesToDisplayOnCanvas.add(tempBubble);
-                boolList.add(Boolean.TRUE);
-            } else {
-                tempBoolList.clear();
-            }
+        }
+        if (tempBoolList.stream().allMatch(Predicate.isEqual(Boolean.TRUE))) {
+            bubblesToDisplayOnCanvas.add(tempBubble);
+            boolList.add(Boolean.TRUE);
+        } else {
+            tempBoolList.clear();
+        }
     }
 
-    public boolean calculateEuclideanDistance(int X1, int Y1, int size1, int X2, int Y2, int size2){
-        double distance = Math.sqrt( Math.pow((X1 - X2), 2) + Math.pow((Y1 - Y2), 2));
+    public boolean calculateEuclideanDistance(int X1, int Y1, int size1, int X2, int Y2, int size2) {
+        double distance = Math.sqrt(Math.pow((X1 - X2), 2) + Math.pow((Y1 - Y2), 2));
 
-        if ((size1 + size2) < distance){
+        if ((size1 + size2) < distance) {
             return true;
         } else {
             return false;
@@ -969,24 +1004,33 @@ public class Controller {
         }
     }
 
-    public void tabHomeDatePickerGraphOfEntriesACTION(ActionEvent actionEvent)   {
+    public void tabHomeDatePickerGraphOfEntriesACTION(ActionEvent actionEvent) {
         int counter = 0;
 
         for (int i = 0; i < listOfEntries.getSize(); i++) {
             if (listOfEntries.getList().get(i).getdDate().getDate() == tabHomeDatePickerGraphOfEntries.getValue().getDayOfMonth()
-                    && tabHomeDatePickerGraphOfEntries.getValue().getMonthValue() == 11){
+                    && tabHomeDatePickerGraphOfEntries.getValue().getMonthValue() == 11) {
                 counter++;
             }
-        } tabHomeTextFieldEntriesToday.setText(""+counter+"");
+        }
+        tabHomeTextFieldEntriesToday.setText("" + counter + "");
     }
 
     public void tabHomeButtonGraphOfEntriesACTION(ActionEvent actionEvent) {
-       goToOverviewTab();
+        goToOverviewTab();
 
     }
 
     public void tabHomeDatePickerGraphOfErrorsACTION(ActionEvent actionEvent) {
+        int counter = 0;
 
+        for (int i = 0; i < listOfErrors.getSize(); i++) {
+            if (listOfErrors.getList().get(i).getdDate().getDate() == tabHomeDatePickerGraphOfErrors.getValue().getDayOfMonth()
+                    && tabHomeDatePickerGraphOfErrors.getValue().getMonthValue() == 11) {
+                counter++;
+            }
+        }
+        tabHomeTextFieldErrorsToday.setText("" + counter + "");
     }
 
     public void tabHomeButtonGraphOfErrorsACTION(ActionEvent actionEvent) {
@@ -1022,32 +1066,24 @@ public class Controller {
     public void tabGlobalTabDatabaseButtonSearchACTION(ActionEvent actionEvent) throws SQLException {
         String toggleButton = null;
         String textFieldInput = tabGlobalTabDatabaseTextFieldSearchBar.getText();
-        if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonID.isSelected()){
+        if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonID.isSelected()) {
             toggleButton = "ID";
-        }
-        else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonTimeStamp.isSelected()){
+        } else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonTimeStamp.isSelected()) {
             toggleButton = "TIME";
-        }
-        else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIP.isSelected()){
+        } else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIP.isSelected()) {
             toggleButton = "IP";
-        }
-        else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonPort.isSelected()){
+        } else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonPort.isSelected()) {
             toggleButton = "PORT";
-        }
-        else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethod.isSelected()){
+        } else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethod.isSelected()) {
             toggleButton = "METHOD";
-        }
-        else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonRequest.isSelected()){
+        } else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonRequest.isSelected()) {
             toggleButton = "REQUEST";
-        }
-        else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponse.isSelected()){
+        } else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponse.isSelected()) {
             toggleButton = "RESPONSE";
-        }
-        else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClient.isSelected()){
+        } else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClient.isSelected()) {
             toggleButton = "FROM_CLIENT";
-        }
-        else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonFromService.isSelected()){
-            toggleButton = "FROM_SERVICE";
+        } else if (tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonFromService.isSelected()) {
+            toggleButton = "FROM_SYS";
         }
 
         System.out.println(toggleButton);
@@ -1091,9 +1127,22 @@ public class Controller {
 
     public void tabMethodButtonVisualizeMethodACTION(ActionEvent actionEvent) throws SQLException {
         populateMethodTabTableView((String) tabMethodComboBoxVisualizeMethod.getSelectionModel().getSelectedItem());
+        setTextArea(tabMethodTabDescriptionTextArea, tabMethodTabDescription);
+
     }
 
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethodACTION(ActionEvent actionEvent) {
     }
 
+    public void fromOverviewToMethod(double x, double y) throws SQLException {
+        Point2D point2D = new Point2D(x,y);
+        for (Bubble bubble:listOfBubbles.getList()){
+            if (bubble.pointInsideShape(point2D)){
+                goToMethodTab();
+                tabMethodComboBoxVisualizeMethod.getSelectionModel().select(bubble.getMethodType().getName());
+                tabMethodButtonVisualizeMethod.fire();
+            }
+        }
     }
+
+}

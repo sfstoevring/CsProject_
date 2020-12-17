@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -122,7 +123,14 @@ public class Bubble {
 //            bubbleOnCanvas.fillOval(x, y, size, size);
 //        }
     }
-
+    public boolean pointInsideShape(Point2D point) {
+        double distance = Math.sqrt( Math.pow((this.getX() - point.getX()), 2) + Math.pow((this.getY() - point.getY()), 2));
+        if(distance <= this.size){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
     @Override

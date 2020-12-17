@@ -93,7 +93,7 @@ class TypeGET extends Method{
 
     @Override
     public Request getRequestFromRequestArrayList(int index) {
-        return this.requestArrayList.getFromList().get(index);
+        return this.requestArrayList.getList().get(index);
     }
 
     @Override
@@ -103,7 +103,7 @@ class TypeGET extends Method{
 
     @Override
     public void addEntryToRequestInRequestArrayList(Entry e, int listIndex) {
-        this.requestArrayList.getFromList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
+        this.requestArrayList.getList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
 
     }
 }
@@ -169,7 +169,7 @@ class TypePOST extends Method {
 
     @Override
     public Request getRequestFromRequestArrayList(int index) {
-        return this.requestArrayList.getFromList().get(index);
+        return this.requestArrayList.getList().get(index);
     }
 
     @Override
@@ -179,7 +179,7 @@ class TypePOST extends Method {
 
     @Override
     public void addEntryToRequestInRequestArrayList(Entry e, int listIndex) {
-        this.requestArrayList.getFromList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
+        this.requestArrayList.getList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
 
     }
 }
@@ -245,7 +245,7 @@ class TypeCONNECT extends Method{
 
     @Override
     public Request getRequestFromRequestArrayList(int index) {
-        return this.requestArrayList.getFromList().get(index);
+        return this.requestArrayList.getList().get(index);
     }
 
     @Override
@@ -255,7 +255,7 @@ class TypeCONNECT extends Method{
 
     @Override
     public void addEntryToRequestInRequestArrayList(Entry e, int listIndex) {
-        this.requestArrayList.getFromList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
+        this.requestArrayList.getList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
 
     }
 }
@@ -321,7 +321,7 @@ class TypeHEAD extends Method{
 
     @Override
     public Request getRequestFromRequestArrayList(int index) {
-        return this.requestArrayList.getFromList().get(index);
+        return this.requestArrayList.getList().get(index);
     }
 
     @Override
@@ -331,7 +331,7 @@ class TypeHEAD extends Method{
 
     @Override
     public void addEntryToRequestInRequestArrayList(Entry e, int listIndex) {
-        this.requestArrayList.getFromList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
+        this.requestArrayList.getList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
 
     }
 }
@@ -397,7 +397,7 @@ class TypePROPFIND extends Method{
 
     @Override
     public Request getRequestFromRequestArrayList(int index) {
-        return this.requestArrayList.getFromList().get(index);
+        return this.requestArrayList.getList().get(index);
     }
 
     @Override
@@ -407,7 +407,7 @@ class TypePROPFIND extends Method{
 
     @Override
     public void addEntryToRequestInRequestArrayList(Entry e, int listIndex) {
-        this.requestArrayList.getFromList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
+        this.requestArrayList.getList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
 
     }
 }
@@ -473,7 +473,7 @@ class TypeASCII extends Method{
 
     @Override
     public Request getRequestFromRequestArrayList(int index) {
-        return this.requestArrayList.getFromList().get(index);
+        return this.requestArrayList.getList().get(index);
     }
 
     @Override
@@ -483,7 +483,7 @@ class TypeASCII extends Method{
 
     @Override
     public void addEntryToRequestInRequestArrayList(Entry e, int listIndex) {
-        this.requestArrayList.getFromList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
+        this.requestArrayList.getList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
 
     }
 }
@@ -549,7 +549,7 @@ class TypeOPTIONS extends Method{
 
     @Override
     public Request getRequestFromRequestArrayList(int index) {
-        return this.requestArrayList.getFromList().get(index);
+        return this.requestArrayList.getList().get(index);
     }
 
     @Override
@@ -559,7 +559,7 @@ class TypeOPTIONS extends Method{
 
     @Override
     public void addEntryToRequestInRequestArrayList(Entry e, int listIndex) {
-        this.requestArrayList.getFromList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
+        this.requestArrayList.getList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
 
     }
 }
@@ -625,7 +625,7 @@ class TypeEMPTY extends Method{
 
     @Override
     public Request getRequestFromRequestArrayList(int index) {
-        return this.requestArrayList.getFromList().get(index);
+        return this.requestArrayList.getList().get(index);
     }
 
     @Override
@@ -635,7 +635,7 @@ class TypeEMPTY extends Method{
 
     @Override
     public void addEntryToRequestInRequestArrayList(Entry e, int listIndex) {
-        this.requestArrayList.getFromList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
+        this.requestArrayList.getList().get(listIndex).addToListBasedOnFirstPartOfReqForAnObject(e);
 
     }
 }

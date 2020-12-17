@@ -21,6 +21,8 @@ public class Entry {
     private int ID;
     private String IPAsString;
     private String sDate;
+    private String sDateWOT;
+    private Date dDateWOT;
 
     private Method methodType; //opfind måde at indsætte methodType her
     private String firstPartOfRequest;
@@ -158,6 +160,25 @@ public class Entry {
 
     public void setFirstPartOfRequest(String firstPartOfRequest) {
         this.firstPartOfRequest = firstPartOfRequest;
+    }
+
+    public String getsDateWOT() {
+        return sDateWOT;
+    }
+
+    public void setsDateWOT(String sDateWOT) throws ParseException {
+        this.sDateWOT = sDateWOT;
+        this.setdDateWOT(sDateWOT);
+    }
+
+    public Date getdDateWOT() {
+        return dDateWOT;
+    }
+
+    public void setdDateWOT(String sDateWOT) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
+        Date tempDate = formatter.parse(sDateWOT);
+        this.dDateWOT = tempDate;
     }
 
     @Override

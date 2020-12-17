@@ -21,8 +21,12 @@ public class AnyList<T> {
         this.anyList.remove(o);
     }
 
-    public ObservableList<T> getFromList(){
+    public ObservableList<T> getList(){
         return anyList;
+    }
+
+    public void setList(ObservableList<T> anyList) {
+        this.anyList = anyList;
     }
 
     public int getSize(){

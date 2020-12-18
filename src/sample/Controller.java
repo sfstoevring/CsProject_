@@ -1109,7 +1109,7 @@ public class Controller {
         resetToggleButtonAndTextField();
     }
 
-    //Togglebuttons for search functionality
+    //Toggle buttons for search functionality
     //
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIDACTION(ActionEvent actionEvent) {
     }
@@ -1139,7 +1139,7 @@ public class Controller {
     public void tabMethodComboBoxVisualizeMethodACTION(ActionEvent actionEvent) {
     }
 
-    //Button that updatas data in all relevant tab in method tab, for the seleceted value in combobox
+    //Button that updates data in all relevant tab in method tab, for the seleceted value in combobox
     //
     public void tabMethodButtonVisualizeMethodACTION(ActionEvent actionEvent) throws SQLException {
         populateMethodTabTableView((String) tabMethodComboBoxVisualizeMethod.getSelectionModel().getSelectedItem());

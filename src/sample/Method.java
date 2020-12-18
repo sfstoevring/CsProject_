@@ -1,4 +1,5 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 public abstract class Method {
 
@@ -32,11 +33,11 @@ public abstract class Method {
 
 }
 
-class TypeGET extends Method{
-        private String name;
-        private int ID;
-        private AnyList<Entry> listOfEntries;
-        private AnyList<Request> requestArrayList;
+class TypeGET extends Method {
+    private String name;
+    private int ID;
+    private AnyList<Entry> listOfEntries;
+    private AnyList<Request> requestArrayList;
 
     public TypeGET() {
         this.name = "GET";
@@ -184,7 +185,7 @@ class TypePOST extends Method {
     }
 }
 
-class TypeCONNECT extends Method{
+class TypeCONNECT extends Method {
     private String name;
     private int ID;
     private AnyList<Entry> listOfEntries;
@@ -260,7 +261,7 @@ class TypeCONNECT extends Method{
     }
 }
 
-class TypeHEAD extends Method{
+class TypeHEAD extends Method {
     private String name;
     private int ID;
     private AnyList<Entry> listOfEntries;
@@ -336,7 +337,7 @@ class TypeHEAD extends Method{
     }
 }
 
-class TypePROPFIND extends Method{
+class TypePROPFIND extends Method {
     private String name;
     private int ID;
     private AnyList<Entry> listOfEntries;
@@ -412,7 +413,7 @@ class TypePROPFIND extends Method{
     }
 }
 
-class TypeASCII extends Method{
+class TypeASCII extends Method {
     private String name;
     private int ID;
     private AnyList<Entry> listOfEntries;
@@ -488,7 +489,7 @@ class TypeASCII extends Method{
     }
 }
 
-class TypeOPTIONS extends Method{
+class TypeOPTIONS extends Method {
     private String name;
     private int ID;
     private AnyList<Entry> listOfEntries;
@@ -564,7 +565,7 @@ class TypeOPTIONS extends Method{
     }
 }
 
-class TypeEMPTY extends Method{
+class TypeEMPTY extends Method {
     private String name;
     private int ID;
     private AnyList<Entry> listOfEntries;

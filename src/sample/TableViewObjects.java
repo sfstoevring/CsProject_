@@ -1,4 +1,5 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

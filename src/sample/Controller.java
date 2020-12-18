@@ -1,15 +1,15 @@
 /**
  * !!!
  * Remember to add:
- *      - javafx SDK lib           (Project structure > Project Settings > Libraries > + > Java)
- *      - GLUON.jar-file    (Project structure > Project Settings > Libraries > + > Java)
- *
- *
- *
+ * - javafx SDK lib           (Project structure > Project Settings > Libraries > + > Java)
+ * - GLUON.jar-file    (Project structure > Project Settings > Libraries > + > Java)
+ * <p>
  * Change path for the VM (Edit configurations > VM options:  "--module-path {Path to javafx SDK} --add-modules javafx.controls,javafx.fxml" )
  * Change path for the Database @ line 152-162
  * !!!
  */
+
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 package sample;
 
@@ -180,7 +180,7 @@ public class Controller {
 
     //Runs when GUI is ready
     //
-    public void initialize() throws ParseException, UnknownHostException, SQLException{
+    public void initialize() throws ParseException, UnknownHostException, SQLException {
         //runs before GUI Launches; creates objects, fills tables, makes graphics and visualization initially
         setPropertyValueFactories();
         createListOfMethods();
@@ -227,7 +227,7 @@ public class Controller {
         //
         tabOverviewCanvas.setOnMouseClicked(event -> {
             try {
-                goToMethodTabBasedOnWhichBubbleIsClickedInOverviewCanvas(event.getX(),event.getY());
+                goToMethodTabBasedOnWhichBubbleIsClickedInOverviewCanvas(event.getX(), event.getY());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -658,8 +658,8 @@ public class Controller {
     }
 
     /**
-    * Methods that can makes graphs and bars
-    */
+     * Methods that can makes graphs and bars
+     */
 
     public void setBarChartGraph(BarChart barChart, CategoryAxis categoryAxis, String categoryAxisLabel, NumberAxis numberAxis, String numberAxisLabel, int listSwitcher) {
 
@@ -784,9 +784,9 @@ public class Controller {
     }
 
     public void goToMethodTabBasedOnWhichBubbleIsClickedInOverviewCanvas(double x, double y) throws SQLException {
-        Point2D point2D = new Point2D(x,y);
-        for (Bubble bubble:listOfBubbles.getList()){
-            if (bubble.pointInsideShape(point2D)){
+        Point2D point2D = new Point2D(x, y);
+        for (Bubble bubble : listOfBubbles.getList()) {
+            if (bubble.pointInsideShape(point2D)) {
                 goToMethodTab();
                 tabMethodComboBoxVisualizeMethod.getSelectionModel().select(bubble.getMethodType().getName());
                 tabMethodButtonVisualizeMethod.fire();
@@ -804,7 +804,7 @@ public class Controller {
     private void setTextArea(javafx.scene.control.TextArea textArea, Tab tab) {
         String comboBoxValue = tabMethodComboBoxVisualizeMethod.getSelectionModel().getSelectedItem().toString();
         System.out.println(comboBoxValue);
-        if (comboBoxValue.equals("ASCII")){
+        if (comboBoxValue.equals("ASCII")) {
             textArea.setText("\"ASCII\"\n\nMeans that someone or something tried to send the server a command in an old format, hoping for some kind of reaction");
         } else if (comboBoxValue.equals("CONNECT")) {
             textArea.setText("\"CONNECT\"\n\nThis specification reserves the method name CONNECT for use with a proxy that can\n" +
@@ -1113,20 +1113,28 @@ public class Controller {
     //
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIDACTION(ActionEvent actionEvent) {
     }
+
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonTimeStampACTION(ActionEvent actionEvent) {
     }
+
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonIPACTION(ActionEvent actionEvent) {
     }
+
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonPortACTION(ActionEvent actionEvent) {
     }
+
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonRequestACTION(ActionEvent actionEvent) {
     }
+
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonResponseACTION(ActionEvent actionEvent) {
     }
+
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonClientACTION(ActionEvent actionEvent) {
     }
+
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonFromServiceACTION(ActionEvent actionEvent) {
     }
+
     public void tabGlobalTabDatabaseToggleButtonGroupSearchToggleButtonMethodACTION(ActionEvent actionEvent) {
     }
 
@@ -1146,10 +1154,10 @@ public class Controller {
         setTextArea(tabMethodTabDescriptionTextArea, tabMethodTabDescription);
     }
 
-   /**
-    * All printing functions not commented out in the init method, to not clutter terminal
-    * Warning lots of data/line if all print functions are run
-    */
+    /**
+     * All printing functions not commented out in the init method, to not clutter terminal
+     * Warning lots of data/line if all print functions are run
+     */
 
     private void printContentOfDateObjects() {
         int i = 0;

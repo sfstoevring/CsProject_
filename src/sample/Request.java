@@ -1,4 +1,6 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
+
 import java.util.ArrayList;
 
 public class Request {

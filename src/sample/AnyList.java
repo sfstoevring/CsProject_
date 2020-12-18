@@ -1,4 +1,5 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,20 +9,20 @@ public class AnyList<T> {
     private ObservableList<T> anyList = null;
 
 
-    public AnyList(String name){
+    public AnyList(String name) {
         this.name = name;
         this.anyList = FXCollections.observableArrayList();
     }
 
-    public void addToList(T o){
+    public void addToList(T o) {
         this.anyList.add(o);
     }
 
-    public void removeFromList(T o){
+    public void removeFromList(T o) {
         this.anyList.remove(o);
     }
 
-    public ObservableList<T> getList(){
+    public ObservableList<T> getList() {
         return anyList;
     }
 
@@ -29,11 +30,11 @@ public class AnyList<T> {
         this.anyList = anyList;
     }
 
-    public int getSize(){
+    public int getSize() {
         return this.anyList.size();
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 

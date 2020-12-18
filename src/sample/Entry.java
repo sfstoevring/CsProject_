@@ -1,4 +1,5 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -27,7 +28,7 @@ public class Entry {
     private Method methodType; //opfind måde at indsætte methodType her
     private String firstPartOfRequest;
 
-    public Entry(){
+    public Entry() {
     }
 
     public Entry(String IP, String date, String method, int response, int responseLength, String fromPage, String client, int port, int ID) throws ParseException, UnknownHostException {
@@ -48,7 +49,9 @@ public class Entry {
         return inetIP;
     }
 
-    public String getIPAsString(){ return this.IPAsString; }
+    public String getIPAsString() {
+        return this.IPAsString;
+    }
 
     public void setInetIP(String IP) throws UnknownHostException {
         this.inetIP = formatIP(IP);
@@ -77,9 +80,9 @@ public class Entry {
     }
 
     public Date formatDate(String date) throws ParseException {
-       SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss");
-       Date tempDate = formatter.parse(date);
-       return tempDate;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss");
+        Date tempDate = formatter.parse(date);
+        return tempDate;
     }
 
     public String getMethod() {

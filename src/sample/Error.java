@@ -1,4 +1,5 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 import javafx.beans.property.SimpleStringProperty;
 
@@ -13,7 +14,7 @@ public class Error {
     private String sDate;
     private Date dDate;
 
-    public Error(){
+    public Error() {
     }
 
     public Error(String errorMsg, int ID) {

@@ -1,4 +1,5 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Point2D;
@@ -7,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.awt.*;
+
 
 public class Bubble {
     private String name;
@@ -46,7 +48,7 @@ public class Bubble {
         return methodType;
     }
 
-    public void setMethodType(Method methodType){
+    public void setMethodType(Method methodType) {
         this.methodType = methodType;
     }
 
@@ -98,19 +100,19 @@ public class Bubble {
         this.overlapping = overlapping;
     }
 
-    public void drawBubble(Canvas canvas){
+    public void drawBubble(Canvas canvas) {
         GraphicsContext bubbleOnCanvas = canvas.getGraphicsContext2D();
-        bubbleOnCanvas.setFill(Color.rgb(250,0,0,0.8));
+        bubbleOnCanvas.setFill(Color.rgb(250, 0, 0, 0.8));
         bubbleOnCanvas.fillOval(this.x, this.y, this.size, this.size);
         bubbleOnCanvas.setStroke(Color.BLACK);
         bubbleOnCanvas.strokeOval(this.x, this.y, this.size, this.size);
     }
 
-    public void drawBubble(Canvas canvas, int x, int y){
+    public void drawBubble(Canvas canvas, int x, int y) {
         this.setX(x);
         this.setY(y);
         GraphicsContext bubbleOnCanvas = canvas.getGraphicsContext2D();
-        bubbleOnCanvas.setFill(Color.rgb(250,0,0,0.8));
+        bubbleOnCanvas.setFill(Color.rgb(250, 0, 0, 0.8));
         bubbleOnCanvas.fillOval(this.x, this.y, this.size, this.size);
         bubbleOnCanvas.setStroke(Color.BLACK);
         bubbleOnCanvas.strokeOval(this.x, this.y, this.size, this.size);
@@ -124,8 +126,8 @@ public class Bubble {
     }
 
     public boolean pointInsideShape(Point2D point) {
-        double distance = Math.sqrt( Math.pow((this.getX() - point.getX()), 2) + Math.pow((this.getY() - point.getY()), 2));
-        if(distance <= this.size){
+        double distance = Math.sqrt(Math.pow((this.getX() - point.getX()), 2) + Math.pow((this.getY() - point.getY()), 2));
+        if (distance <= this.size) {
             return true;
         } else {
             return false;

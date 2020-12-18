@@ -1,4 +1,5 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -47,7 +48,8 @@ public class IP {
     public void addHitToThisIp(int addHitToThisIp) {
         this.hitsFromThisIp += hitsFromThisIp;
     }
-    public void overwriteHitsFromThisIp(int newValue){
+
+    public void overwriteHitsFromThisIp(int newValue) {
         this.hitsFromThisIp = newValue;
     }
 }

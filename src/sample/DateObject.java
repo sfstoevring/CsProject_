@@ -1,4 +1,5 @@
 package sample;
+// All files in sample folder are written by Anders Heide, Jesper Petersen, Magnus Stilling and Simon Støvring
 
 import java.util.Date;
 
@@ -10,7 +11,7 @@ public class DateObject {
     private int amountOfEntries;
     private int amountOfErrors;
 
-    public DateObject (Date date) {
+    public DateObject(Date date) {
         this.date = date;
     }
 
@@ -54,11 +55,11 @@ public class DateObject {
         this.amountOfErrors = amountOfErrors;
     }
 
-    public void addAmountOfEntries(){
+    public void addAmountOfEntries() {
         this.amountOfEntries += 1;
     }
 
-    public void addAmountOfErrors(){
+    public void addAmountOfErrors() {
         this.amountOfErrors += 1;
     }
 }

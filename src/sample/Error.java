@@ -21,7 +21,6 @@ public class Error {
         this.ID = ID;
     }
 
-
     public String getErrorMsg() {
         return errorMsg;
     }

@@ -19,7 +19,6 @@ public class Bubble {
     private Method methodType;
     private boolean overlapping;
 
-
     public Bubble(String name, int size, int ID, Method methodType) {
         this.name = name;
         this.size = size;
@@ -123,6 +122,7 @@ public class Bubble {
 //            bubbleOnCanvas.fillOval(x, y, size, size);
 //        }
     }
+
     public boolean pointInsideShape(Point2D point) {
         double distance = Math.sqrt( Math.pow((this.getX() - point.getX()), 2) + Math.pow((this.getY() - point.getY()), 2));
         if(distance <= this.size){
@@ -131,7 +131,6 @@ public class Bubble {
             return false;
         }
     }
-
 
     @Override
     public String toString() {

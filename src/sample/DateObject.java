@@ -57,6 +57,7 @@ public class DateObject {
     public void addAmountOfEntries(){
         this.amountOfEntries += 1;
     }
+
     public void addAmountOfErrors(){
         this.amountOfErrors += 1;
     }
